@@ -3,20 +3,20 @@ import { getCartCount } from '../utils/cart.js';
 import { getCurrentPath } from '../router.js';
 
 export function renderHeader() {
-    const path = getCurrentPath();
+  const path = getCurrentPath();
 
-    return `
+  return `
     <header class="header" id="site-header">
       <div class="header__inner">
         <a href="#/" class="header__logo">
           <span class="header__logo-icon">ॐ</span>
-          <span>HanumanSetu</span>
+          <span>हनुमान सेतु</span>
         </a>
 
         <nav class="header__nav" id="nav-menu">
-          <a href="#/" class="header__nav-link ${path === '/' ? 'active' : ''}">Home</a>
-          <a href="#/products" class="header__nav-link ${path === '/products' ? 'active' : ''}">Products</a>
-          <a href="#/about" class="header__nav-link ${path === '/about' ? 'active' : ''}">About</a>
+          <a href="#/" class="header__nav-link ${path === '/' ? 'active' : ''}">होम</a>
+          <a href="#/products" class="header__nav-link ${path === '/products' ? 'active' : ''}">उत्पाद</a>
+          <a href="#/about" class="header__nav-link ${path === '/about' ? 'active' : ''}">हमारे बारे में</a>
         </nav>
 
         <div class="header__right" style="display:flex;align-items:center;gap:8px;">
@@ -26,7 +26,7 @@ export function renderHeader() {
               <line x1="3" y1="6" x2="21" y2="6"/>
               <path d="M16 10a4 4 0 0 1-8 0"/>
             </svg>
-            <span>Cart</span>
+            <span>कार्ट</span>
             ${getCartCount() > 0 ? `<span class="header__cart-badge" id="cart-badge">${getCartCount()}</span>` : ''}
           </a>
 
@@ -42,43 +42,43 @@ export function renderHeader() {
 }
 
 export function initHeaderEvents() {
-    // Scroll effect
-    const header = document.getElementById('site-header');
-    if (header) {
-        window.addEventListener('scroll', () => {
-            header.classList.toggle('scrolled', window.scrollY > 20);
-        });
-    }
-
-    // Mobile menu toggle
-    const toggle = document.getElementById('menu-toggle');
-    const navMenu = document.getElementById('nav-menu');
-    if (toggle && navMenu) {
-        toggle.addEventListener('click', () => {
-            navMenu.classList.toggle('open');
-        });
-    }
-
-    // Update cart badge on cart changes
-    window.addEventListener('cart-updated', () => {
-        const count = getCartCount();
-        const badge = document.getElementById('cart-badge');
-        const cartEl = document.getElementById('header-cart');
-
-        if (count > 0) {
-            if (badge) {
-                badge.textContent = count;
-                badge.classList.add('bump');
-                setTimeout(() => badge.classList.remove('bump'), 300);
-            } else if (cartEl) {
-                const newBadge = document.createElement('span');
-                newBadge.className = 'header__cart-badge';
-                newBadge.id = 'cart-badge';
-                newBadge.textContent = count;
-                cartEl.appendChild(newBadge);
-            }
-        } else if (badge) {
-            badge.remove();
-        }
+  // Scroll effect
+  const header = document.getElementById('site-header');
+  if (header) {
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 20);
     });
+  }
+
+  // Mobile menu toggle
+  const toggle = document.getElementById('menu-toggle');
+  const navMenu = document.getElementById('nav-menu');
+  if (toggle && navMenu) {
+    toggle.addEventListener('click', () => {
+      navMenu.classList.toggle('open');
+    });
+  }
+
+  // Update cart badge on cart changes
+  window.addEventListener('cart-updated', () => {
+    const count = getCartCount();
+    const badge = document.getElementById('cart-badge');
+    const cartEl = document.getElementById('header-cart');
+
+    if (count > 0) {
+      if (badge) {
+        badge.textContent = count;
+        badge.classList.add('bump');
+        setTimeout(() => badge.classList.remove('bump'), 300);
+      } else if (cartEl) {
+        const newBadge = document.createElement('span');
+        newBadge.className = 'header__cart-badge';
+        newBadge.id = 'cart-badge';
+        newBadge.textContent = count;
+        cartEl.appendChild(newBadge);
+      }
+    } else if (badge) {
+      badge.remove();
+    }
+  });
 }

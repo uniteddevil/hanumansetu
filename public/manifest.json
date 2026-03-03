@@ -1,0 +1,22 @@
+{
+    "name": "HanumanSetu",
+    "short_name": "HanumanSetu",
+    "description": "हनुमान सेतु — पवित्र धार्मिक उत्पाद | भक्ति सामग्री",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#FFFAF5",
+    "theme_color": "#E8630A",
+    "icons": [
+        {
+            "src": "/favicon.svg",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml"
+        },
+        {
+            "src": "/favicon.svg",
+            "sizes": "192x192",
+            "type": "image/svg+xml",
+            "purpose": "maskable"
+        }
+    ]
+}

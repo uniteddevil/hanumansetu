@@ -27,7 +27,7 @@ export function addToCart(productId, quantity = 1) {
     }
 
     saveCart(cart);
-    showToast('Added to cart ✓');
+    showToast('कार्ट में जोड़ा गया ✓');
     return cart;
 }
 
@@ -80,18 +80,18 @@ export function generateWhatsAppMessage() {
     const items = getCartItems();
     if (items.length === 0) return '';
 
-    let message = `🙏 *New Order from HanumanSetu*\n\n`;
-    message += `*Order Details:*\n`;
+    let message = `🙏 *हनुमान सेतु से नया ऑर्डर*\n\n`;
+    message += `*ऑर्डर विवरण:*\n`;
     message += `─────────────\n`;
 
     items.forEach((item, i) => {
         message += `${i + 1}. ${item.name}\n`;
-        message += `   Qty: ${item.quantity} × ${formatPrice(item.price)} = ${formatPrice(item.subtotal)}\n\n`;
+        message += `   मात्रा: ${item.quantity} × ${formatPrice(item.price)} = ${formatPrice(item.subtotal)}\n\n`;
     });
 
     message += `─────────────\n`;
-    message += `*Total: ${formatPrice(getCartTotal())}*\n\n`;
-    message += `Please confirm availability and share payment details. 🙏`;
+    message += `*कुल राशि: ${formatPrice(getCartTotal())}*\n\n`;
+    message += `कृपया उपलब्धता की पुष्टि करें और भुगतान विवरण साझा करें। 🙏`;
 
     return message;
 }

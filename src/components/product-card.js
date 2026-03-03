@@ -3,7 +3,7 @@ import { formatPrice } from '../data/products.js';
 import { addToCart } from '../utils/cart.js';
 
 export function renderProductCard(product) {
-    return `
+  return `
     <article class="product-card" data-product-id="${product.id}">
       <a href="#/products/${product.slug}" class="product-card__image">
         <img src="${product.image}" alt="${product.name}" loading="lazy"
@@ -21,7 +21,7 @@ export function renderProductCard(product) {
         </div>
         <div class="product-card__action">
           <button class="btn btn--primary btn--sm add-to-cart-btn" data-id="${product.id}" style="width:100%">
-            Add to Cart
+            कार्ट में डालें
           </button>
         </div>
       </div>
@@ -30,12 +30,12 @@ export function renderProductCard(product) {
 }
 
 export function initProductCardEvents() {
-    document.querySelectorAll('.add-to-cart-btn').forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const productId = parseInt(btn.dataset.id);
-            addToCart(productId);
-        });
+  document.querySelectorAll('.add-to-cart-btn').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const productId = parseInt(btn.dataset.id);
+      addToCart(productId);
     });
+  });
 }

@@ -58,9 +58,9 @@ async function handleRoute() {
     const app = document.getElementById('app');
     app.innerHTML = `
     <div style="text-align:center;padding:200px 20px;">
-      <h1>Page Not Found</h1>
-      <p style="margin:16px 0;color:var(--color-text-secondary)">The page you're looking for doesn't exist.</p>
-      <a href="#/" class="btn btn--primary">Go Home</a>
+      <h1>पृष्ठ नहीं मिला</h1>
+      <p style="margin:16px 0;color:var(--color-text-secondary)">आप जिस पृष्ठ की तलाश कर रहे हैं वह मौजूद नहीं है।</p>
+      <a href="#/" class="btn btn--primary">होम पर जाएं</a>
     </div>
   `;
 }
