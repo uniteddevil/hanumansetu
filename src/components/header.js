@@ -9,7 +9,7 @@ export function renderHeader() {
     <header class="header" id="site-header">
       <div class="header__inner">
         <a href="#/" class="header__logo">
-          <span class="header__logo-icon">ॐ</span>
+          <img src="/assets/icon-192.png" alt="HanumanSetu Logo" class="header__logo-img" />
           <span>हनुमान सेतु</span>
         </a>
 
