@@ -29,6 +29,12 @@ export const products = [
         ],
         tag: 'सबसे ज्यादा बिकने वाला',
         image: '/assets/product-1.png',
+        rating: 4.9,
+        reviewCount: 124,
+        reviews: [
+            { id: 1, user: 'राजेश कुमार', rating: 5, comment: 'अद्भुत गुणवत्ता! मूर्ति बहुत ही सुंदर और जीवंत लगती है।' },
+            { id: 2, user: 'सुनीता शर्मा', rating: 4, comment: 'पैकेजिंग बहुत अच्छी थी। मूर्ति का विवरण बहुत सुंदर है।' }
+        ]
     },
     {
         id: 2,
@@ -48,6 +54,12 @@ export const products = [
         ],
         tag: 'लोकप्रिय',
         image: '/assets/product-2.png',
+        rating: 4.7,
+        reviewCount: 86,
+        reviews: [
+            { id: 1, user: 'अमित मिश्रा', rating: 5, comment: 'पीतल बहुत ही चमक वाला और मजबूत है।' },
+            { id: 2, user: 'प्रियंका', rating: 4, comment: 'अच्छी थाली है, रोज़ाना पूजा के लिए बेहतरीन।' }
+        ]
     },
     {
         id: 3,
@@ -67,6 +79,12 @@ export const products = [
         ],
         tag: null,
         image: '/assets/product-3.png',
+        rating: 4.8,
+        reviewCount: 210,
+        reviews: [
+            { id: 1, user: 'विकास', rating: 5, comment: 'एकदम शुद्ध और असली रुद्राक्ष। जप के लिए बहुत अच्छा।' },
+            { id: 2, user: 'नेहा', rating: 5, comment: 'बहुत ही शांतिपूर्ण ऊर्जा महसूस होती है।' }
+        ]
     },
     {
         id: 4,
@@ -86,6 +104,12 @@ export const products = [
         ],
         tag: 'नया',
         image: '/assets/product-4.png',
+        rating: 4.6,
+        reviewCount: 45,
+        reviews: [
+            { id: 1, user: 'संजय', rating: 4, comment: 'खुशबू बहुत ही मनमोहक है।' },
+            { id: 2, user: 'मीना', rating: 5, comment: 'उपहार देने के लिए बहुत बढ़िया विकल्प।' }
+        ]
     },
     {
         id: 5,
@@ -105,6 +129,12 @@ export const products = [
         ],
         tag: null,
         image: '/assets/product-5.png',
+        rating: 4.5,
+        reviewCount: 32,
+        reviews: [
+            { id: 1, user: 'राहुल', rating: 5, comment: 'तांबा शुद्ध है। बहुत ही अच्छी चमक है।' },
+            { id: 2, user: 'गीता', rating: 4, comment: 'उपयोग करने में आसान और सुंदर।' }
+        ]
     },
 ];
 

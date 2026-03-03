@@ -1,6 +1,7 @@
 // Product detail page
-import { getProductBySlug, formatPrice } from '../data/products.js';
+import { getProductBySlug, formatPrice, products } from '../data/products.js';
 import { addToCart } from '../utils/cart.js';
+import { renderProductCard, initProductCardEvents } from '../components/product-card.js';
 
 export function renderProductDetail(slug) {
   const product = getProductBySlug(slug);
@@ -18,6 +19,31 @@ export function renderProductDetail(slug) {
   const discount = product.originalPrice
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
+
+  // Mock related products (same category or random others)
+  const relatedProducts = products
+    .filter(p => p.id !== product.id && (p.category === product.category))
+    .slice(0, 4);
+
+  // If not enough related in same category, fill with others
+  if (relatedProducts.length < 4) {
+    const others = products
+      .filter(p => p.id !== product.id && !relatedProducts.find(r => r.id === p.id))
+      .slice(0, 4 - relatedProducts.length);
+    relatedProducts.push(...others);
+  }
+
+  const renderStars = (rating) => {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    let starsHtml = '';
+    for (let i = 0; i < 5; i++) {
+      if (i < fullStars) starsHtml += '★';
+      else if (i === fullStars && hasHalfStar) starsHtml += '½'; // Simplistic half star
+      else starsHtml += '☆';
+    }
+    return starsHtml;
+  };
 
   return `
     <section class="product-detail">
@@ -41,6 +67,11 @@ export function renderProductDetail(slug) {
           <div class="product-detail__info fade-in-up">
             <div class="product-detail__category">${product.category}</div>
             <h1 class="product-detail__name">${product.name}</h1>
+            
+            <div class="rating-stars" style="margin-bottom:var(--space-4);">
+              <span style="color:var(--color-gold);">${renderStars(product.rating)}</span>
+              <span>${product.rating} (${product.reviewCount} समीक्षाएँ)</span>
+            </div>
 
             <div class="product-detail__price">
               ${formatPrice(product.price)}
@@ -79,6 +110,32 @@ export function renderProductDetail(slug) {
         </div>
       </div>
     </section>
+
+    <section class="reviews-section">
+      <div class="container">
+        <h2 style="margin-bottom:var(--space-8);">ग्राहक समीक्षाएँ</h2>
+        <div class="reviews-grid">
+          ${product.reviews.map(review => `
+            <div class="review-card">
+              <div class="review-card__header">
+                <span class="review-card__user">${review.user}</span>
+                <span style="color:var(--color-gold);">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</span>
+              </div>
+              <p class="review-card__content">"${review.comment}"</p>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+
+    <section class="related-products">
+      <div class="container">
+        <h2 style="margin-bottom:var(--space-8);">संबंधित उत्पाद</h2>
+        <div class="products-grid">
+          ${relatedProducts.map(p => renderProductCard(p)).join('')}
+        </div>
+      </div>
+    </section>
   `;
 }
 
@@ -104,4 +161,6 @@ export function initProductDetailEvents(slug) {
       addToCart(product.id, quantity);
     }
   });
+
+  initProductCardEvents();
 }
