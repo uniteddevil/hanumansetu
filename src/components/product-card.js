@@ -3,6 +3,17 @@ import { formatPrice } from '../data/products.js';
 import { addToCart } from '../utils/cart.js';
 
 export function renderProductCard(product) {
+  const renderStars = (rating) => {
+    if (!rating) return '';
+    const fullStars = Math.floor(rating);
+    let starsHtml = '';
+    for (let i = 0; i < 5; i++) {
+      if (i < fullStars) starsHtml += '★';
+      else starsHtml += '☆';
+    }
+    return `<div class="product-card__rating">${starsHtml} <span>${rating}</span></div>`;
+  };
+
   return `
     <article class="product-card" data-product-id="${product.id}">
       <a href="#/products/${product.slug}" class="product-card__image">
@@ -15,10 +26,14 @@ export function renderProductCard(product) {
         <h3 class="product-card__name">
           <a href="#/products/${product.slug}">${product.name}</a>
         </h3>
+        
+        ${renderStars(product.rating)}
+
         <div class="product-card__price">
           ${formatPrice(product.price)}
           ${product.originalPrice ? `<span class="product-card__price-old">${formatPrice(product.originalPrice)}</span>` : ''}
         </div>
+        
         <div class="product-card__action">
           <button class="btn btn--primary btn--sm add-to-cart-btn" data-id="${product.id}" style="width:100%">
             कार्ट में डालें
