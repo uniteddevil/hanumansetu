@@ -27,9 +27,7 @@ export function renderAbout() {
             </p>
           </div>
           <div class="about-content__image">
-            <div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg, var(--color-primary-50), var(--color-bg-warm));font-size:4rem;">
-              🙏
-            </div>
+            <img src="/assets/about-mission.png" alt="HanumanSetu Artisans" style="width: 100%; height: 100%; object-fit: cover;" />
           </div>
         </div>
 
