@@ -1,7 +1,9 @@
-import { products } from '../data/products.js';
+import { fetchProducts } from '../data/products.js';
 import { renderProductCard, initProductCardEvents } from '../components/product-card.js';
 
-export function renderProducts() {
+export async function renderProducts() {
+  const allProducts = await fetchProducts();
+
   return `
     <section class="section" style="padding-top:calc(var(--header-height) + var(--space-12));">
       <div class="container">
@@ -13,7 +15,7 @@ export function renderProducts() {
           </p>
         </div>
         <div class="products-grid stagger-children">
-          ${products.map((p) => renderProductCard(p)).join('')}
+          ${allProducts.map((p) => renderProductCard(p)).join('')}
         </div>
       </div>
     </section>

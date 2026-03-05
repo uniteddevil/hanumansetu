@@ -1,8 +1,9 @@
-import { products, formatPrice } from '../data/products.js';
+import { fetchProducts, formatPrice } from '../data/products.js';
 import { renderProductCard, initProductCardEvents } from '../components/product-card.js';
 
-export function renderHome() {
-  const featuredProducts = products.slice(0, 4);
+export async function renderHome() {
+  const allProducts = await fetchProducts();
+  const featuredProducts = allProducts.slice(0, 4);
 
   return `
     <section class="hero">

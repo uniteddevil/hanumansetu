@@ -12,58 +12,71 @@ import { renderAccount, initAccountEvents } from './pages/account.js';
 
 const app = document.getElementById('app');
 
-function renderPage(pageContent) {
-    app.innerHTML = renderHeader() + `<main>${pageContent}</main>` + renderFooter();
+async function renderPage(pageContentPromise) {
+    // Show header/footer immediately, with loading in middle
+    app.innerHTML = renderHeader() + `<main id="page-content"><div class="loading-container"><div class="loading-spinner"></div></div></main>` + renderFooter();
     initHeaderEvents();
 
-    // Close mobile menu on navigate
-    const navMenu = document.getElementById('nav-menu');
-    if (navMenu) navMenu.classList.remove('open');
+    try {
+        const pageContent = await pageContentPromise;
+        const main = document.getElementById('page-content');
+        if (main) main.innerHTML = pageContent;
+
+        // Close mobile menu on navigate
+        const navMenu = document.getElementById('nav-menu');
+        if (navMenu) navMenu.classList.remove('open');
+
+        window.scrollTo(0, 0);
+    } catch (error) {
+        console.error('Error rendering page:', error);
+        const main = document.getElementById('page-content');
+        if (main) main.innerHTML = `<div class="container" style="padding: 100px 20px; text-align: center;"><h2>Error loading page</h2><p>${error.message}</p></div>`;
+    }
 }
 
 // Register routes
-registerRoute('/', () => {
-    renderPage(renderHome());
+registerRoute('/', async () => {
+    await renderPage(renderHome());
     initHomeEvents();
 });
 
-registerRoute('/products', () => {
-    renderPage(renderProducts());
+registerRoute('/products', async () => {
+    await renderPage(renderProducts());
     initProductsEvents();
 });
 
-registerRoute('/products/:slug', (params) => {
-    renderPage(renderProductDetail(params.slug));
+registerRoute('/products/:slug', async (params) => {
+    await renderPage(renderProductDetail(params.slug));
     initProductDetailEvents(params.slug);
 });
 
-registerRoute('/cart', () => {
-    renderPage(renderCart());
+registerRoute('/cart', async () => {
+    await renderPage(renderCart());
     initCartEvents();
 });
 
-registerRoute('/about', () => {
-    renderPage(renderAbout());
+registerRoute('/about', async () => {
+    await renderPage(renderAbout());
     initAboutEvents();
 });
 
-registerRoute('/login', () => {
-    renderPage(renderLogin());
+registerRoute('/login', async () => {
+    await renderPage(renderLogin());
     initAuthEvents('login');
 });
 
-registerRoute('/register', () => {
-    renderPage(renderRegister());
+registerRoute('/register', async () => {
+    await renderPage(renderRegister());
     initAuthEvents('register');
 });
 
-registerRoute('/account', () => {
-    renderPage(renderAccount());
+registerRoute('/account', async () => {
+    await renderPage(renderAccount());
     initAccountEvents();
 });
 
-registerRoute('/account/:section', () => {
-    renderPage(renderAccount());
+registerRoute('/account/:section', async () => {
+    await renderPage(renderAccount());
     initAccountEvents();
 });
 

@@ -1,10 +1,10 @@
-import { getProductBySlug, formatPrice, products } from '../data/products.js';
+import { getProductBySlug, formatPrice, fetchProducts } from '../data/products.js';
 import { addToCart } from '../utils/cart.js';
 import { renderProductCard, initProductCardEvents } from '../components/product-card.js';
 import { renderCarousel, initCarousel } from '../components/carousel.js';
 
-export function renderProductDetail(slug) {
-  const product = getProductBySlug(slug);
+export async function renderProductDetail(slug) {
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     return `
@@ -20,14 +20,15 @@ export function renderProductDetail(slug) {
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
 
-  // Mock related products (same category or random others)
-  const relatedProducts = products
+  // Fetch all products for matching related ones
+  const allProducts = await fetchProducts();
+  const relatedProducts = allProducts
     .filter(p => p.id !== product.id && (p.category === product.category))
     .slice(0, 4);
 
   // If not enough related in same category, fill with others
   if (relatedProducts.length < 4) {
-    const others = products
+    const others = allProducts
       .filter(p => p.id !== product.id && !relatedProducts.find(r => r.id === p.id))
       .slice(0, 4 - relatedProducts.length);
     relatedProducts.push(...others);
@@ -39,7 +40,7 @@ export function renderProductDetail(slug) {
     let starsHtml = '';
     for (let i = 0; i < 5; i++) {
       if (i < fullStars) starsHtml += '★';
-      else if (i === fullStars && hasHalfStar) starsHtml += '½'; // Simplistic half star
+      else if (i === fullStars && hasHalfStar) starsHtml += '½';
       else starsHtml += '☆';
     }
     return starsHtml;
@@ -48,6 +49,8 @@ export function renderProductDetail(slug) {
   const carouselItems = product.images && product.images.length > 0
     ? product.images.map(img => `<img src="${img}" alt="${product.name}" />`)
     : [`<img src="${product.image}" alt="${product.name}" />`];
+
+  const productReviews = product.reviews || [];
 
   return `
     <section class="product-detail">
@@ -116,15 +119,18 @@ export function renderProductDetail(slug) {
       <div class="container">
         <h2 style="margin-bottom:var(--space-8);">ग्राहक समीक्षाएँ</h2>
         <div class="reviews-grid">
-          ${product.reviews.map(review => `
-            <div class="review-card">
-              <div class="review-card__header">
-                <span class="review-card__user">${review.user}</span>
-                <span style="color:var(--color-gold);">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</span>
-              </div>
-              <p class="review-card__content">"${review.comment}"</p>
-            </div>
-          `).join('')}
+          ${productReviews.length > 0
+      ? productReviews.map(review => `
+                <div class="review-card">
+                  <div class="review-card__header">
+                    <span class="review-card__user">${review.user}</span>
+                    <span style="color:var(--color-gold);">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</span>
+                  </div>
+                  <p class="review-card__content">"${review.comment}"</p>
+                </div>
+              `).join('')
+      : '<p style="color:var(--color-text-secondary);">अभी तक कोई समीक्षा नहीं है।</p>'
+    }
         </div>
       </div>
     </section>
@@ -140,23 +146,23 @@ export function renderProductDetail(slug) {
   `;
 }
 
-export function initProductDetailEvents(slug) {
+export async function initProductDetailEvents(slug) {
   initCarousel('product-gallery-carousel');
 
   let quantity = 1;
   const qtyValue = document.getElementById('qty-value');
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
 
   document.getElementById('qty-minus')?.addEventListener('click', () => {
     if (quantity > 1) {
       quantity--;
-      qtyValue.textContent = quantity;
+      if (qtyValue) qtyValue.textContent = quantity;
     }
   });
 
   document.getElementById('qty-plus')?.addEventListener('click', () => {
     quantity++;
-    qtyValue.textContent = quantity;
+    if (qtyValue) qtyValue.textContent = quantity;
   });
 
   document.getElementById('add-to-cart-detail')?.addEventListener('click', () => {
