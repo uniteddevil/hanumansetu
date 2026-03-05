@@ -2,35 +2,35 @@ import { supabase } from '../utils/supabase.js';
 import { navigate } from '../router.js';
 
 export function renderLogin() {
-    return `
-    <section class="auth-page">
+  return `
+    <section class="auth-page" style="padding: 120px 0;">
       <div class="container container--narrow">
-        <div class="auth-card fade-in">
+        <div class="auth-card glass-card fade-in">
           <div class="auth-card__header">
-            <h2>स्वागत है</h2>
-            <p>अपने खाते में लॉगिन करें</p>
+            <h2>Welcome Back</h2>
+            <p>Login to your spiritual account</p>
           </div>
           
           <form class="auth-form" id="login-form">
-            <div id="auth-error" class="auth-error" style="display:none;"></div>
+            <div id="auth-error" class="auth-error" style="display:none; padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 0.875rem;"></div>
             
             <div class="form-group">
-              <label for="email">ईमेल</label>
-              <input type="email" id="email" id="login-email" placeholder="example@email.com" required />
+              <label for="email">Email Address</label>
+              <input type="email" id="login-email" placeholder="devotee@example.com" required />
             </div>
             
             <div class="form-group">
-              <label for="password">पासवर्ड</label>
-              <input type="password" id="password" id="login-password" placeholder="••••••••" required />
+              <label for="password">Password</label>
+              <input type="password" id="login-password" placeholder="••••••••" required />
             </div>
             
             <button type="submit" class="btn btn--primary btn--lg" style="width:100%;" id="login-btn">
-              लॉगिन करें
+              Login 🙏
             </button>
           </form>
           
           <div class="auth-card__footer">
-            <p>खाता नहीं है? <a href="#/register">रजिस्टर करें</a></p>
+            <p>Don't have an account? <a href="#/register" style="color: var(--color-primary); font-weight: 600;">Register Now</a></p>
           </div>
         </div>
       </div>
@@ -39,40 +39,40 @@ export function renderLogin() {
 }
 
 export function renderRegister() {
-    return `
-    <section class="auth-page">
+  return `
+    <section class="auth-page" style="padding: 120px 0;">
       <div class="container container--narrow">
-        <div class="auth-card fade-in">
+        <div class="auth-card glass-card fade-in">
           <div class="auth-card__header">
-            <h2>खाता बनाएं</h2>
-            <p>हनुमान सेतु परिवार में आपका स्वागत है</p>
+            <h2>Create Account</h2>
+            <p>Join the HanumanSetu family of devotees</p>
           </div>
           
           <form class="auth-form" id="register-form">
-            <div id="auth-error" class="auth-error" style="display:none;"></div>
+            <div id="auth-error" class="auth-error" style="display:none; padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 0.875rem;"></div>
             
             <div class="form-group">
-              <label for="full-name">पूरा नाम</label>
-              <input type="text" id="full-name" placeholder="आपका नाम" required />
+              <label for="full-name">Full Name</label>
+              <input type="text" id="full-name" placeholder="Enter your name" required />
             </div>
 
             <div class="form-group">
-              <label for="email">ईमेल</label>
-              <input type="email" id="email" placeholder="example@email.com" required />
+              <label for="email">Email Address</label>
+              <input type="email" id="register-email" placeholder="devotee@example.com" required />
             </div>
             
             <div class="form-group">
-              <label for="password">पासवर्ड</label>
-              <input type="password" id="password" placeholder="कम से कम 6 अक्षर" minlength="6" required />
+              <label for="password">Password</label>
+              <input type="password" id="register-password" placeholder="Minimum 6 characters" minlength="6" required />
             </div>
             
             <button type="submit" class="btn btn--primary btn--lg" style="width:100%;" id="register-btn">
-              रजिस्टर करें
+              Create Account ✨
             </button>
           </form>
           
           <div class="auth-card__footer">
-            <p>पहले से खाता है? <a href="#/login">लॉगिन करें</a></p>
+            <p>Already have an account? <a href="#/login" style="color: var(--color-primary); font-weight: 600;">Login Here</a></p>
           </div>
         </div>
       </div>
@@ -81,63 +81,64 @@ export function renderRegister() {
 }
 
 export function initAuthEvents(type) {
-    const form = document.querySelector(type === 'login' ? '#login-form' : '#register-form');
-    const errorEl = document.getElementById('auth-error');
+  const form = document.querySelector(type === 'login' ? '#login-form' : '#register-form');
+  const errorEl = document.getElementById('auth-error');
 
-    if (!form) return;
+  if (!form) return;
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = form.querySelector('button[type="submit"]');
-        const originalText = btn.textContent;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = form.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
 
-        // UI Loading state
-        btn.disabled = true;
-        btn.textContent = 'प्रतीक्षा करें...';
-        errorEl.style.display = 'none';
+    // UI Loading state
+    btn.disabled = true;
+    btn.textContent = 'Please wait...';
+    errorEl.style.display = 'none';
 
-        const email = form.querySelector('input[type="email"]').value;
-        const password = form.querySelector('input[type="password"]').value;
+    const email = form.querySelector('input[type="email"]').value;
+    const password = form.querySelector('input[type="password"]').value;
 
-        try {
-            if (type === 'register') {
-                const fullName = document.getElementById('full-name').value;
-                const { data, error } = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        data: {
-                            full_name: fullName,
-                        }
-                    }
-                });
-
-                if (error) throw error;
-
-                // Note: Supabase might require email confirmation.
-                if (data.user && data.session) {
-                    navigate('/');
-                } else {
-                    errorEl.textContent = 'सफलता! कृपया अपना ईमेल सत्यापित करें।';
-                    errorEl.style.display = 'block';
-                    errorEl.classList.add('auth-success');
-                }
-            } else {
-                const { error } = await supabase.auth.signInWithPassword({
-                    email,
-                    password,
-                });
-
-                if (error) throw error;
-                navigate('/');
+    try {
+      if (type === 'register') {
+        const fullName = document.getElementById('full-name').value;
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: fullName,
             }
-        } catch (err) {
-            errorEl.textContent = err.message || 'कुछ गलत हुआ। कृपया पुनः प्रयास करें।';
-            errorEl.style.display = 'block';
-            errorEl.classList.remove('auth-success');
-        } finally {
-            btn.disabled = false;
-            btn.textContent = originalText;
+          }
+        });
+
+        if (error) throw error;
+
+        if (data.user && data.session) {
+          navigate('/');
+        } else {
+          errorEl.textContent = 'Success! Please check your email for verification.';
+          errorEl.style.display = 'block';
+          errorEl.style.backgroundColor = '#dcfce7';
+          errorEl.style.color = '#166534';
         }
-    });
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) throw error;
+        navigate('/');
+      }
+    } catch (err) {
+      errorEl.textContent = err.message || 'Something went wrong. Please try again.';
+      errorEl.style.display = 'block';
+      errorEl.style.backgroundColor = '#fee2e2';
+      errorEl.style.color = '#991b1b';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+  });
 }
