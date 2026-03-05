@@ -7,6 +7,7 @@ import { renderProducts, initProductsEvents } from './pages/products.js';
 import { renderProductDetail, initProductDetailEvents } from './pages/product-detail.js';
 import { renderCart, initCartEvents } from './pages/cart.js';
 import { renderAbout, initAboutEvents } from './pages/about.js';
+import { renderLogin, renderRegister, initAuthEvents } from './pages/auth.js';
 
 const app = document.getElementById('app');
 
@@ -43,6 +44,16 @@ registerRoute('/cart', () => {
 registerRoute('/about', () => {
     renderPage(renderAbout());
     initAboutEvents();
+});
+
+registerRoute('/login', () => {
+    renderPage(renderLogin());
+    initAuthEvents('login');
+});
+
+registerRoute('/register', () => {
+    renderPage(renderRegister());
+    initAuthEvents('register');
 });
 
 // Start the app
