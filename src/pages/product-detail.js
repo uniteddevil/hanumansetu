@@ -1,7 +1,7 @@
-// Product detail page
 import { getProductBySlug, formatPrice, products } from '../data/products.js';
 import { addToCart } from '../utils/cart.js';
 import { renderProductCard, initProductCardEvents } from '../components/product-card.js';
+import { renderCarousel, initCarousel } from '../components/carousel.js';
 
 export function renderProductDetail(slug) {
   const product = getProductBySlug(slug);
@@ -45,6 +45,10 @@ export function renderProductDetail(slug) {
     return starsHtml;
   };
 
+  const carouselItems = product.images && product.images.length > 0
+    ? product.images.map(img => `<img src="${img}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;" />`)
+    : [`<img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;" />`];
+
   return `
     <section class="product-detail">
       <div class="container">
@@ -57,23 +61,8 @@ export function renderProductDetail(slug) {
         </nav>
 
         <div class="product-detail__inner">
-          <div class="product-detail__gallery fade-in">
-            <div class="product-detail__main-image">
-              <img src="${product.image}" alt="${product.name}" id="main-product-image"
-                   onerror="this.style.display='none';this.parentElement.innerHTML+='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;font-size:5rem;opacity:0.2;\\'>🕉️</div>'" />
-            </div>
-            ${product.images && product.images.length > 1
-      ? `
-              <div class="product-detail__thumbnails">
-                ${product.images.map((img, index) => `
-                  <div class="product-detail__thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}">
-                    <img src="${img}" alt="${product.name} thumbnail ${index + 1}" />
-                  </div>
-                `).join('')}
-              </div>
-            `
-      : ''
-    }
+          <div class="product-detail__gallery fade-in" style="overflow:visible;">
+            ${renderCarousel({ id: 'product-gallery-carousel', items: carouselItems, autoPlayInterval: 4000 })}
           </div>
 
           <div class="product-detail__info fade-in-up">
@@ -152,6 +141,8 @@ export function renderProductDetail(slug) {
 }
 
 export function initProductDetailEvents(slug) {
+  initCarousel('product-gallery-carousel');
+
   let quantity = 1;
   const qtyValue = document.getElementById('qty-value');
   const product = getProductBySlug(slug);
@@ -172,21 +163,6 @@ export function initProductDetailEvents(slug) {
     if (product) {
       addToCart(product.id, quantity);
     }
-  });
-
-  // Gallery switching logic
-  const thumbnails = document.querySelectorAll('.product-detail__thumbnail');
-  const mainImage = document.getElementById('main-product-image');
-
-  thumbnails.forEach(thumb => {
-    thumb.addEventListener('click', () => {
-      const index = parseInt(thumb.dataset.index);
-      mainImage.src = product.images[index];
-
-      // Update active state
-      thumbnails.forEach(t => t.classList.remove('active'));
-      thumb.classList.add('active');
-    });
   });
 
   initProductCardEvents();

@@ -1,9 +1,15 @@
-// Home page
 import { products, formatPrice } from '../data/products.js';
 import { renderProductCard, initProductCardEvents } from '../components/product-card.js';
+import { renderCarousel, initCarousel } from '../components/carousel.js';
 
 export function renderHome() {
   const featuredProducts = products.slice(0, 4);
+
+  const heroSlides = [
+    { html: `<img src="/assets/hero.png" alt="HanumanSetu Hero Banner" style="width: 100%; height: 100%; object-fit: cover;" />` },
+    { html: `<img src="/assets/product-1.png" alt="Hanuman Marble" style="width: 100%; height: 100%; object-fit: cover;" />` },
+    { html: `<img src="/assets/product-6.png" alt="Silver Ganesha" style="width: 100%; height: 100%; object-fit: cover;" />` }
+  ];
 
   return `
     <section class="hero">
@@ -35,8 +41,8 @@ export function renderHome() {
           </div>
 
           <div class="hero__image">
-            <div class="hero__image-wrapper" id="hero-image">
-              <img src="/assets/hero.png" alt="HanumanSetu Hero Banner" style="width: 100%; height: 100%; object-fit: cover;" />
+            <div class="hero__image-wrapper" id="hero-carousel-container" style="overflow:visible;">
+              ${renderCarousel({ id: 'home-hero-carousel', items: heroSlides, autoPlayInterval: 6000 })}
             </div>
             <div class="hero__image-deco"></div>
           </div>
@@ -101,5 +107,6 @@ export function renderHome() {
 }
 
 export function initHomeEvents() {
+  initCarousel('home-hero-carousel');
   initProductCardEvents();
 }
