@@ -1,6 +1,6 @@
 import { getCartCount } from '../utils/cart.js';
 import { getCurrentPath } from '../router.js';
-import { supabase } from '../utils/supabase.js';
+import { supabase, isAdmin } from '../utils/supabase.js';
 
 export function renderHeader() {
   const path = getCurrentPath();

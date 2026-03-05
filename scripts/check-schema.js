@@ -6,16 +6,12 @@ dotenv.config();
 const supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.VITE_SUPABASE_ANON_KEY);
 
 async function checkSchema() {
-    const { data, error } = await supabase.from('profiles').select('*').limit(1);
+    const { data, error } = await supabase.from('profiles').select('*');
     if (error) {
-        console.error('Error fetching profile:', error);
-    } else if (data.length === 0) {
-        console.log('Profiles table is empty.');
-        // Check columns using a select for an non-existent column to see the error, or just try id
-        const { data: d2, error: e2 } = await supabase.from('profiles').select('*');
-        console.log('Columns (empty table):', d2 ? Object.keys(d2[0] || {}) : 'No data');
+        console.error('Error fetching profiles:', error);
     } else {
-        console.log('Columns in profiles:', Object.keys(data[0] || {}));
+        console.log('Total profiles found:', data.length);
+        data.forEach(p => console.log(`- ID: ${p.id}, Email: ${p.email}, Admin: ${p.is_admin}`));
     }
 }
 checkSchema();

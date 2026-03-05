@@ -1,3 +1,7 @@
+import { supabase, isAdmin } from '../utils/supabase.js';
+import { navigate } from '../router.js';
+import { formatPrice } from '../data/products.js';
+
 export async function renderAdmin() {
     const isUserAdmin = await isAdmin();
 
