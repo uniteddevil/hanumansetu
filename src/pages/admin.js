@@ -298,6 +298,46 @@ async function renderProductsView() {
     `;
 }
 
+async function renderCustomersView() {
+    const { data: profiles, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
+
+    if (error) return `<div class="view-error">Error loading customers: ${error.message}</div>`;
+
+    return `
+        <div class="view-header">
+            <h2>Customer Management</h2>
+            <p>Total Registered: ${profiles.length}</p>
+        </div>
+
+        <div class="table-container glass-card">
+            <div class="admin-table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Joined</th>
+                            <th>Status</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${profiles.map(p => `
+                            <tr>
+                                <td><strong>${p.full_name || 'N/A'}</strong></td>
+                                <td>${p.email || 'N/A'}</td>
+                                <td>${new Date(p.created_at).toLocaleDateString('en-US')}</td>
+                                <td><span class="badge badge--shipped">Active</span></td>
+                                <td>${p.is_admin ? '<span class="badge badge--blessed">Admin</span>' : '<span class="badge badge--pending">User</span>'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
 export function initAdminEvents() {
     // Navigation
     document.querySelectorAll('.admin-nav-item').forEach(btn => {
@@ -311,18 +351,20 @@ export function initAdminEvents() {
             const container = document.getElementById('admin-view-container');
             container.innerHTML = '<div class="loading-spinner"></div>';
 
-            // Shared logic - get orders/products
-            let { data: orders } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
-            if (!orders || orders.length === 0) orders = generateMockData();
-
             if (view === 'dashboard') {
+                let { data: orders } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
+                if (!orders || orders.length === 0) orders = generateMockData();
                 container.innerHTML = renderDashboardView(orders);
             } else if (view === 'orders') {
+                let { data: orders } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
+                if (!orders || orders.length === 0) orders = generateMockData();
                 container.innerHTML = renderOrdersView(orders);
                 attachOrderEvents();
             } else if (view === 'products') {
                 container.innerHTML = await renderProductsView();
                 attachProductEvents();
+            } else if (view === 'customers') {
+                container.innerHTML = await renderCustomersView();
             } else {
                 container.innerHTML = `<div class="view-empty"><h3>${view} Coming Soon...</h3></div>`;
             }
