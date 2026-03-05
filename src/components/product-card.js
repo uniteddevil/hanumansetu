@@ -66,6 +66,20 @@ export function initProductCardEvents() {
     if (carousel) {
       initCarousel(carousel.id);
     }
+
+    // Make entire card clickable
+    card.addEventListener('click', (e) => {
+      // Don't navigate if clicking add to cart or carousel dots
+      if (e.target.closest('.add-to-cart-btn') || e.target.closest('.carousel__dot')) {
+        return;
+      }
+
+      const productId = card.dataset.productId;
+      const product = document.querySelector(`[data-product-id="${productId}"]`).querySelector('h3 a');
+      if (product) {
+        window.location.hash = product.getAttribute('href');
+      }
+    });
   });
 
   document.querySelectorAll('.add-to-cart-btn').forEach((btn) => {
