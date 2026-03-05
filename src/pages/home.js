@@ -65,35 +65,37 @@ export function renderHome() {
 
     <section class="section">
       <div class="container">
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-8);text-align:center;">
-          <div style="padding:var(--space-8);border-radius:var(--radius-lg);background:var(--color-bg-card);border:1px solid var(--color-border-light);">
-            <div style="font-size:2.5rem;margin-bottom:var(--space-4);">🚚</div>
-            <h4 style="margin-bottom:var(--space-2);">पूरे भारत में डिलीवरी</h4>
-            <p style="font-size:var(--text-sm);color:var(--color-text-secondary);">सुरक्षित पैकेजिंग। आपके दरवाजे पर डिलीवरी।</p>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-card__icon">🚚</div>
+            <h4 class="feature-card__title">पूरे भारत में डिलीवरी</h4>
+            <p class="feature-card__text">सुरक्षित पैकेजिंग। आपके दरवाजे पर डिलीवरी।</p>
           </div>
-          <div style="padding:var(--space-8);border-radius:var(--radius-lg);background:var(--color-bg-card);border:1px solid var(--color-border-light);">
-            <div style="font-size:2.5rem;margin-bottom:var(--space-4);">✨</div>
-            <h4 style="margin-bottom:var(--space-2);">प्रामाणिक और अभिमंत्रित</h4>
-            <p style="font-size:var(--text-sm);color:var(--color-text-secondary);">हर उत्पाद असली, हस्तनिर्मित और नैतिक रूप से प्राप्त किया गया है।</p>
+          <div class="feature-card">
+            <div class="feature-card__icon">✨</div>
+            <h4 class="feature-card__title">प्रामाणिक और अभिमंत्रित</h4>
+            <p class="feature-card__text">हर उत्पाद असली, हस्तनिर्मित और नैतिक रूप से प्राप्त किया गया है।</p>
           </div>
-          <div style="padding:var(--space-8);border-radius:var(--radius-lg);background:var(--color-bg-card);border:1px solid var(--color-border-light);">
-            <div style="font-size:2.5rem;margin-bottom:var(--space-4);">💝</div>
-            <h4 style="margin-bottom:var(--space-2);">आसान ऑर्डरिंग</h4>
-            <p style="font-size:var(--text-sm);color:var(--color-text-secondary);">व्हाट्सएप से ऑर्डर करें। सरल, तेज़ और व्यक्तिगत।</p>
+          <div class="feature-card">
+            <div class="feature-card__icon">💝</div>
+            <h4 class="feature-card__title">आसान ऑर्डरिंग</h4>
+            <p class="feature-card__text">व्हाट्सएप से ऑर्डर करें। सरल, तेज़ और व्यक्तिगत।</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" style="background:var(--color-text);color:white;text-align:center;">
-      <div class="container" style="max-width:700px;">
-        <h2 style="color:white;margin-bottom:var(--space-4);">अपनी आध्यात्मिक यात्रा शुरू करने के लिए तैयार हैं?</h2>
-        <p style="color:rgba(255,255,255,0.7);margin-bottom:var(--space-8);font-size:var(--text-lg);">
+    <section class="section section--cta">
+      <div class="container container--narrow">
+        <h2 class="cta__title">अपनी आध्यात्मिक यात्रा शुरू करने के लिए तैयार हैं?</h2>
+        <p class="cta__text">
           भक्ति उत्पादों के हमारे क्यूरेटेड संग्रह को ब्राउज़ करें और अपने घर में पवित्र ऊर्जा लाएं।
         </p>
-        <a href="#/products" class="btn btn--primary btn--lg">
-          अभी खरीदें 🙏
-        </a>
+        <div class="cta__actions">
+          <a href="#/products" class="btn btn--primary btn--lg">
+            अभी खरीदें 🙏
+          </a>
+        </div>
       </div>
     </section>
   `;
