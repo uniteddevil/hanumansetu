@@ -16,7 +16,17 @@ export function getCurrentPath() {
 }
 
 async function handleRoute() {
-    const path = getCurrentPath();
+    const fullPath = getCurrentPath();
+    const [path, queryString] = fullPath.split('?');
+
+    // Parse query parameters
+    const queryParams = {};
+    if (queryString) {
+        queryString.split('&').forEach(pair => {
+            const [key, value] = pair.split('=');
+            queryParams[key] = decodeURIComponent(value);
+        });
+    }
 
     // Run cleanup for previous page
     if (currentCleanup && typeof currentCleanup === 'function') {
@@ -27,9 +37,12 @@ async function handleRoute() {
     // Scroll to top
     window.scrollTo(0, 0);
 
+    // Prepare final params object
+    const finalParams = { ...queryParams };
+
     // Try exact match first
     if (routes[path]) {
-        currentCleanup = await routes[path]();
+        currentCleanup = await routes[path](finalParams);
         return;
     }
 
@@ -45,11 +58,10 @@ async function handleRoute() {
         const match = path.match(regex);
 
         if (match) {
-            const params = {};
             paramNames.forEach((name, i) => {
-                params[name] = match[i + 1];
+                finalParams[name] = match[i + 1];
             });
-            currentCleanup = await handler(params);
+            currentCleanup = await handler(finalParams);
             return;
         }
     }
