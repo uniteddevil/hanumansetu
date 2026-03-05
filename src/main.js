@@ -9,6 +9,7 @@ import { renderCart, initCartEvents } from './pages/cart.js';
 import { renderAbout, initAboutEvents } from './pages/about.js';
 import { renderLogin, renderRegister, initAuthEvents } from './pages/auth.js';
 import { renderAccount, initAccountEvents } from './pages/account.js';
+import { renderAdmin, initAdminEvents } from './pages/admin.js';
 
 const app = document.getElementById('app');
 
@@ -78,6 +79,11 @@ registerRoute('/account', async () => {
 registerRoute('/account/:section', async () => {
     await renderPage(renderAccount());
     initAccountEvents();
+});
+
+registerRoute('/admin', async () => {
+    await renderPage(renderAdmin());
+    initAdminEvents();
 });
 
 // Start the app

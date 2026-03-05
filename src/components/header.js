@@ -4,8 +4,6 @@ import { supabase } from '../utils/supabase.js';
 
 export function renderHeader() {
   const path = getCurrentPath();
-  const session = supabase.auth.session ? supabase.auth.session() : null; // This might need async or event handling
-  // For now, we'll check local storage or use a reactive approach
   const user = JSON.parse(localStorage.getItem('sb-qwmqxdxkgzdgdyyynlku-auth-token'))?.user;
 
   return `
@@ -20,7 +18,8 @@ export function renderHeader() {
           <a href="#/" class="header__nav-link ${path === '/' ? 'active' : ''}">होम</a>
           <a href="#/products" class="header__nav-link ${path === '/products' ? 'active' : ''}">उत्पाद</a>
           <a href="#/about" class="header__nav-link ${path === '/about' ? 'active' : ''}">हमारे बारे में</a>
-          ${user ? `<a href="#/account" class="header__nav-link ${path === '/account' ? 'active' : ''}">मेरा खाता</a>` : `<a href="#/login" class="header__nav-link ${path === '/login' ? 'active' : ''}">लॉगिन</a>`}
+          <span id="admin-link-placeholder"></span>
+          ${user ? `<a href="#/account" class="header__nav-link ${path.startsWith('/account') ? 'active' : ''}">मेरा खाता</a>` : `<a href="#/login" class="header__nav-link ${path === '/login' ? 'active' : ''}">लॉगिन</a>`}
         </nav>
 
         <div class="header__right" style="display:flex;align-items:center;gap:8px;">
@@ -45,7 +44,18 @@ export function renderHeader() {
   `;
 }
 
-export function initHeaderEvents() {
+export async function initHeaderEvents() {
+  const path = getCurrentPath();
+
+  // Check for admin status and update placeholder
+  const adminPlaceholder = document.getElementById('admin-link-placeholder');
+  if (adminPlaceholder) {
+    const isUserAdmin = await isAdmin();
+    if (isUserAdmin) {
+      adminPlaceholder.innerHTML = `<a href="#/admin" class="header__nav-link ${path === '/admin' ? 'active' : ''}">एडमिन</a>`;
+    }
+  }
+
   // Scroll effect
   const header = document.getElementById('site-header');
   if (header) {
@@ -98,7 +108,7 @@ export function initHeaderEvents() {
       const temp = document.createElement('div');
       temp.innerHTML = newHeaderHtml;
       parent.insertBefore(temp.firstElementChild, nextSibling);
-      initHeaderEvents();
+      initHeaderEvents(); // This will trigger the isAdmin check again
     }
   });
 }

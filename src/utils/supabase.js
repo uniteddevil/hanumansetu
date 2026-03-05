@@ -30,3 +30,14 @@ export async function getProfile(userId) {
 
     return { data, error };
 }
+
+/**
+ * Check if the current user is an admin
+ */
+export async function isAdmin() {
+    const session = await getSession();
+    if (!session) return false;
+
+    const { data } = await getProfile(session.user.id);
+    return data?.is_admin || false;
+}
