@@ -1,10 +1,3 @@
-import { supabase, isAdmin } from '../utils/supabase.js';
-import { navigate } from '../router.js';
-import { fetchProducts, formatPrice } from '../data/products.js';
-
-/**
- * Render the Admin Dashboard
- */
 export async function renderAdmin() {
     const isUserAdmin = await isAdmin();
 
@@ -13,7 +6,6 @@ export async function renderAdmin() {
         return '';
     }
 
-    const products = await fetchProducts();
     const { data: orders } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
 
     return `
@@ -32,6 +24,67 @@ export async function renderAdmin() {
           <div id="admin-tab-content">
             ${renderAdminOrders(orders || [])}
           </div>
+        </div>
+      </div>
+
+      <!-- Product Modal -->
+      <div id="product-modal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="modal-title">उत्पाद संपादित करें</h3>
+            <span class="close-modal">&times;</span>
+          </div>
+          <form id="product-form" class="admin-form">
+            <input type="hidden" id="product-id" />
+            <div class="form-group">
+              <label>नाम</label>
+              <input type="text" id="p-name" required />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>कीमत (₹)</label>
+                <input type="number" id="p-price" required />
+              </div>
+              <div class="form-group">
+                <label>मूल कीमत (Optional)</label>
+                <input type="number" id="p-original-price" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>श्रेणी</label>
+                <input type="text" id="p-category" required />
+              </div>
+              <div class="form-group">
+                <label>स्लग (Unique URL)</label>
+                <input type="text" id="p-slug" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>विवरण</label>
+              <textarea id="p-description" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+              <label>मुख्य छवि URL</label>
+              <input type="text" id="p-image" required />
+            </div>
+            <div class="form-group">
+              <label>अतिरिक्त छवियाँ (Comma separated URLs)</label>
+              <input type="text" id="p-images" />
+            </div>
+            <div class="form-group">
+              <label>विशेषताएँ (Comma separated)</label>
+              <input type="text" id="p-features" />
+            </div>
+            <div class="form-group">
+              <label>टैग (जैसे: 'Best Seller')</label>
+              <input type="text" id="p-tag" />
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn--secondary" id="cancel-modal">रद्द करें</button>
+              <button type="submit" class="btn btn--primary" id="save-product-btn">सहेजें</button>
+            </div>
+          </form>
         </div>
       </div>
     </section>
@@ -114,7 +167,10 @@ async function renderAdminProducts() {
                                 <td>${formatPrice(p.price)}</td>
                                 <td>${p.category}</td>
                                 <td>
-                                    <button class="btn btn--sm btn--secondary edit-product-btn" data-id="${p.id}">Edit</button>
+                                    <div style="display:flex;gap:var(--space-2);">
+                                        <button class="btn btn--sm btn--secondary edit-product-btn" data-id="${p.id}">संपादित करें</button>
+                                        <button class="btn btn--sm btn--danger delete-product-btn" data-id="${p.id}">हटाएं</button>
+                                    </div>
                                 </td>
                             </tr>
                         `).join('')}
@@ -141,6 +197,9 @@ export function initAdminEvents() {
             } else if (tab === 'products') {
                 content.innerHTML = await renderAdminProducts();
                 attachProductEvents();
+            } else if (tab === 'stats') {
+                const { data: orders } = await supabase.from('orders').select('total_amount, status');
+                content.innerHTML = renderAdminStats(orders || []);
             } else {
                 content.innerHTML = '<p style="text-align:center;padding:50px;">आंकड़े जल्द आ रहे हैं...</p>';
             }
@@ -148,6 +207,65 @@ export function initAdminEvents() {
     });
 
     attachOrderEvents();
+    initModalEvents();
+}
+
+function renderAdminStats(orders) {
+    const totalRevenue = orders
+        .filter(o => ['Delivered', 'Shipped', 'Blessed'].includes(o.status))
+        .reduce((sum, o) => sum + parseFloat(o.total_amount), 0);
+
+    const totalOrders = orders.length;
+    const pendingOrders = orders.filter(o => o.status === 'Pending').length;
+
+    return `
+        <div class="admin-section">
+            <h3 class="admin-section-title">सांख्यिकी अवलोकन</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">कुल आय</span>
+                    <strong class="stat-value">${formatPrice(totalRevenue)}</strong>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">कुल ऑर्डर</span>
+                    <strong class="stat-value">${totalOrders}</strong>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">पेंडिंग ऑर्डर</span>
+                    <strong class="stat-value">${pendingOrders}</strong>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function initModalEvents() {
+    const modal = document.getElementById('product-modal');
+    const closeBtn = document.querySelector('.close-modal');
+    const cancelBtn = document.getElementById('cancel-modal');
+
+    const closeModal = () => {
+        modal.style.display = 'none';
+        document.getElementById('product-form').reset();
+    };
+
+    closeBtn?.addEventListener('click', closeModal);
+    cancelBtn?.addEventListener('click', closeModal);
+
+    document.getElementById('product-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await saveProduct();
+        closeModal();
+        // Refresh products tab if active
+        const productsBtn = document.querySelector('.admin-tab-btn[data-tab="products"]');
+        if (productsBtn?.classList.contains('active')) {
+            productsBtn.click();
+        }
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
 }
 
 function attachOrderEvents() {
@@ -164,9 +282,6 @@ function attachOrderEvents() {
             if (error) {
                 alert('स्थिति अपडेट करने में विफल');
                 console.error(error);
-            } else {
-                // Show toast or subtle confirmation
-                console.log('Status updated to', newStatus);
             }
         });
     });
@@ -174,12 +289,105 @@ function attachOrderEvents() {
 
 function attachProductEvents() {
     document.getElementById('add-product-btn')?.addEventListener('click', () => {
-        alert('उत्पाद जोड़ें सुविधा जल्द आ रही है। अभी के लिए, मौजूदा डेटा का उपयोग करें।');
+        showProductModal();
     });
 
     document.querySelectorAll('.edit-product-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            alert('संपादन सुविधा जल्द आ रही है।');
+        btn.addEventListener('click', async () => {
+            const id = btn.dataset.id;
+            const { data: product } = await supabase.from('products').select('*').eq('id', id).single();
+            if (product) showProductModal(product);
         });
     });
+
+    document.querySelectorAll('.delete-product-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            if (confirm('क्या आप वाकई इस उत्पाद को हटाना चाहते हैं?')) {
+                const id = btn.dataset.id;
+                const { error } = await supabase.from('products').delete().eq('id', id);
+                if (!error) {
+                    document.querySelector('.admin-tab-btn[data-tab="products"]')?.click();
+                } else {
+                    alert('हटाने में विफल');
+                }
+            }
+        });
+    });
+}
+
+function showProductModal(product = null) {
+    const modal = document.getElementById('product-modal');
+    const title = document.getElementById('modal-title');
+    const form = document.getElementById('product-form');
+
+    title.textContent = product ? 'उत्पाद संपादित करें' : 'नया उत्पाद जोड़ें';
+
+    if (product) {
+        document.getElementById('product-id').value = product.id;
+        document.getElementById('p-name').value = product.name;
+        document.getElementById('p-price').value = product.price;
+        document.getElementById('p-original-price').value = product.original_price || '';
+        document.getElementById('p-category').value = product.category;
+        document.getElementById('p-slug').value = product.slug;
+        document.getElementById('p-description').value = product.description;
+        document.getElementById('p-image').value = product.image;
+        document.getElementById('p-images').value = (product.images || []).join(', ');
+        document.getElementById('p-features').value = (product.features || []).join(', ');
+        document.getElementById('p-tag').value = product.tag || '';
+    } else {
+        form.reset();
+        document.getElementById('product-id').value = '';
+    }
+
+    modal.style.display = 'block';
+}
+
+async function saveProduct() {
+    const id = document.getElementById('product-id').value;
+    const name = document.getElementById('p-name').value;
+    const price = parseFloat(document.getElementById('p-price').value);
+    const original_price = parseFloat(document.getElementById('p-original-price').value) || null;
+    const category = document.getElementById('p-category').value;
+    const slug = document.getElementById('p-slug').value;
+    const description = document.getElementById('p-description').value;
+    const image = document.getElementById('p-image').value;
+    const images = document.getElementById('p-images').value.split(',').map(s => s.trim()).filter(Boolean);
+    const features = document.getElementById('p-features').value.split(',').map(s => s.trim()).filter(Boolean);
+    const tag = document.getElementById('p-tag').value;
+
+    const productData = {
+        name,
+        price,
+        original_price,
+        category,
+        slug,
+        description,
+        image,
+        images,
+        features,
+        tag,
+        updated_at: new Date().toISOString()
+    };
+
+    if (id) {
+        // Update
+        const { error } = await supabase
+            .from('products')
+            .update(productData)
+            .eq('id', id);
+
+        if (error) {
+            alert('अपडेट करने में विफल: ' + error.message);
+        }
+    } else {
+        // Create - using timestamp for ID as table uses bigint
+        productData.id = Math.floor(Date.now() / 1000);
+        const { error } = await supabase
+            .from('products')
+            .insert(productData);
+
+        if (error) {
+            alert('जोड़ने में विफल: ' + error.message);
+        }
+    }
 }
