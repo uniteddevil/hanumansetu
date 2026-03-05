@@ -1,6 +1,6 @@
 import { getCartCount } from '../utils/cart.js';
 import { getCurrentPath } from '../router.js';
-import { supabase, isAdmin } from '../utils/supabase.js';
+import { supabase } from '../utils/supabase.js';
 
 export function renderHeader() {
   const path = getCurrentPath();
@@ -11,15 +11,14 @@ export function renderHeader() {
       <div class="header__inner">
         <a href="#/" class="header__logo">
           <img src="/assets/logo.png" alt="HanumanSetu Logo" class="header__logo-img" />
-          <span>HanumanSetu</span>
+          <span>हनुमान सेतु</span>
         </a>
 
         <nav class="header__nav" id="nav-menu">
-          <a href="#/" class="header__nav-link ${path === '/' ? 'active' : ''}">Home</a>
-          <a href="#/products" class="header__nav-link ${path === '/products' ? 'active' : ''}">Products</a>
-          <a href="#/about" class="header__nav-link ${path === '/about' ? 'active' : ''}">About Us</a>
-          <span id="admin-link-placeholder"></span>
-          ${user ? `<a href="#/account" class="header__nav-link ${path.startsWith('/account') ? 'active' : ''}">My Account</a>` : `<a href="#/login" class="header__nav-link ${path === '/login' ? 'active' : ''}">Login</a>`}
+          <a href="#/" class="header__nav-link ${path === '/' ? 'active' : ''}">होम</a>
+          <a href="#/products" class="header__nav-link ${path === '/products' ? 'active' : ''}">उत्पाद</a>
+          <a href="#/about" class="header__nav-link ${path === '/about' ? 'active' : ''}">हमारे बारे में</a>
+          ${user ? `<a href="#/account" class="header__nav-link ${path.startsWith('/account') ? 'active' : ''}">मेरा खाता</a>` : `<a href="#/login" class="header__nav-link ${path === '/login' ? 'active' : ''}">लॉगिन</a>`}
         </nav>
 
         <div class="header__right" style="display:flex;align-items:center;gap:8px;">
@@ -29,7 +28,7 @@ export function renderHeader() {
               <line x1="3" y1="6" x2="21" y2="6"/>
               <path d="M16 10a4 4 0 0 1-8 0"/>
             </svg>
-            <span>Cart</span>
+            <span>कार्ट</span>
             ${getCartCount() > 0 ? `<span class="header__cart-badge" id="cart-badge">${getCartCount()}</span>` : ''}
           </a>
 
@@ -45,17 +44,6 @@ export function renderHeader() {
 }
 
 export async function initHeaderEvents() {
-  const path = getCurrentPath();
-
-  // Check for admin status and update placeholder
-  const adminPlaceholder = document.getElementById('admin-link-placeholder');
-  if (adminPlaceholder) {
-    const isUserAdmin = await isAdmin();
-    if (isUserAdmin) {
-      adminPlaceholder.innerHTML = `<a href="#/admin" class="header__nav-link ${path === '/admin' ? 'active' : ''}">एडमिन</a>`;
-    }
-  }
-
   // Scroll effect
   const header = document.getElementById('site-header');
   if (header) {
@@ -100,7 +88,6 @@ export async function initHeaderEvents() {
 
 // Global Auth state change listener (only register once)
 supabase.auth.onAuthStateChange((event) => {
-  // Only re-render on actual sign in/out events to prevent loops
   if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
     const siteHeader = document.getElementById('site-header');
     if (siteHeader) {

@@ -12,29 +12,29 @@ export async function renderHome() {
         <div class="hero__inner">
           <div class="hero__content fade-in-up">
             <div class="hero__badge shadow-sm">
-              🙏 Trusted by 5000+ Devotees
+              🙏 5000+ भक्तों का अटूट विश्वास
             </div>
             <h1 class="hero__title">
-              Bring Home the <span>Divine Blessings</span>
+              अपने घर लाएं <span>दिव्य आशीर्वाद</span>
             </h1>
             <p class="hero__description">
-              Discover our curated collection of authentic spiritual products - from blessed idols to sacred rosaries. Each item is ethically sourced and energized with tradition.
+              प्रामाणिक आध्यात्मिक उत्पादों का हमारा चुनिंदा संग्रह - पवित्र मूर्तियों से लेकर सिद्ध मालाओं तक। प्रत्येक वस्तु परंपरा के साथ शुद्धिकृत और ऊर्जावान है।
             </p>
             <div class="hero__actions">
               <a href="#/products" class="btn btn--primary btn--lg">
-                Explore Collection
+                संग्रह देखें
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12"/>
                   <polyline points="12 5 19 12 12 19"/>
                 </svg>
               </a>
-              <a href="#/about" class="btn btn--secondary btn--lg">Our Story</a>
+              <a href="#/about" class="btn btn--secondary btn--lg">हमारी कहानी</a>
             </div>
           </div>
 
           <div class="hero__image fade-in-up delay-2">
             <div class="hero__image-wrapper">
-              <img src="/assets/hero-premium.png" alt="Divine HanumanSetu" />
+              <img src="/assets/hero-premium.png" alt="दिव्य हनुमान सेतु" />
             </div>
           </div>
         </div>
@@ -45,30 +45,30 @@ export async function renderHome() {
     <section class="section">
       <div class="container">
         <div style="text-align:center; margin-bottom:var(--space-12);">
-          <span class="section-label">Browse Sanctuary</span>
-          <h2 class="section-title">Shop by Category</h2>
+          <span class="section-label">श्रेणी के अनुसार चयन करें</span>
+          <h2 class="section-title">संग्रह ब्राउज़ करें</h2>
         </div>
         
         <div class="category-grid">
           <div class="category-card fade-in-up delay-1" onclick="window.location.hash='#/products?category=Statues'">
-            <img src="/assets/cat-murti.png" alt="Pavitra Murti" />
+            <img src="/assets/cat-murti.png" alt="पवित्र मूर्तियाँ" />
             <div class="category-card__content">
-              <h3 class="category-card__title">Pavitra Murti</h3>
-              <p>Hand-crafted divine idols</p>
+              <h3 class="category-card__title">पवित्र मूर्तियाँ</h3>
+              <p>हाथ से निर्मित दिव्य मूर्तियाँ</p>
             </div>
           </div>
           <div class="category-card fade-in-up delay-2" onclick="window.location.hash='#/products?category=Rosaries'">
-            <img src="/assets/cat-mala.png" alt="Siddha Mala" />
+            <img src="/assets/cat-mala.png" alt="सिद्ध माला" />
             <div class="category-card__content">
-              <h3 class="category-card__title">Siddha Mala</h3>
-              <p>Energized prayer beads</p>
+              <h3 class="category-card__title">सिद्ध माला</h3>
+              <p>ऊर्जावान प्रार्थना माला</p>
             </div>
           </div>
           <div class="category-card fade-in-up delay-3" onclick="window.location.hash='#/products?category=Pooja Essentials'">
-            <img src="/assets/cat-puja.png" alt="Pooja Essentials" />
+            <img src="/assets/cat-puja.png" alt="पूजा सामग्री" />
             <div class="category-card__content">
-              <h3 class="category-card__title">Pooja Rituals</h3>
-              <p>Everything for your daily prayers</p>
+              <h3 class="category-card__title">पूजा सामग्री</h3>
+              <p>आपकी दैनिक पूजा के लिए सब कुछ</p>
             </div>
           </div>
         </div>
@@ -79,17 +79,17 @@ export async function renderHome() {
     <section class="section--lg" style="background:var(--color-surface); border-top:1px solid var(--color-border-light);">
       <div class="container">
         <div style="text-align:center;margin-bottom:var(--space-12);">
-          <span class="section-label">Divine Collection</span>
-          <h2 class="section-title">Featured Blessings</h2>
+          <span class="section-label">दिव्य संग्रह</span>
+          <h2 class="section-title">विशेष आशीर्वाद</h2>
           <p class="section-subtitle" style="margin:0 auto;">
-            Hand-picked spiritual essentials to elevate your home sanctuary.
+            आपके घर के मंदिर के लिए चुनिंदा आध्यात्मिक उत्पाद।
           </p>
         </div>
         <div class="products-grid stagger-children">
           ${featuredProducts.map((p) => renderProductCard(p)).join('')}
         </div>
         <div style="text-align:center;margin-top:var(--space-12);">
-          <a href="#/products" class="btn btn--secondary btn--lg">View All Products →</a>
+          <a href="#/products" class="btn btn--secondary btn--lg">सभी उत्पाद देखें →</a>
         </div>
       </div>
     </section>
@@ -98,30 +98,30 @@ export async function renderHome() {
     <section class="section bg-mandala">
       <div class="container">
         <div style="text-align:center; margin-bottom:var(--space-12);">
-          <span class="section-label">Our Philosophy</span>
-          <h2 class="section-title">The Divine Journey</h2>
+          <span class="section-label">हमारा दर्शन</span>
+          <h2 class="section-title">दिव्य यात्रा</h2>
         </div>
         
         <div class="process-grid">
           <div class="process-step">
             <div class="process-step__number">1</div>
-            <h4>Ethical Sourcing</h4>
-            <p>Directly from artisans across India's holy cities.</p>
+            <h4>नैतिक स्रोत</h4>
+            <p>भारत के पवित्र शहरों के कारीगरों से सीधे प्राप्त।</p>
           </div>
           <div class="process-step">
             <div class="process-step__number">2</div>
-            <h4>Purification</h4>
-            <p>Every item undergoes traditional cleaning rituals.</p>
+            <h4>शुद्धिकरण</h4>
+            <p>प्रत्येक वस्तु पारंपरिक सफाई अनुष्ठानों से गुजरती है।</p>
           </div>
           <div class="process-step">
             <div class="process-step__number">3</div>
-            <h4>Abhimantrit</h4>
-            <p>Blessed by priests with sacred Vedic chants.</p>
+            <h4>अभिमंत्रित</h4>
+            <p>वैदिक मंत्रों के साथ पुजारियों द्वारा आशीर्वादित।</p>
           </div>
           <div class="process-step">
             <div class="process-step__number">4</div>
-            <h4>Safe Delivery</h4>
-            <p>Packed with care to maintain sanctity until your door.</p>
+            <h4>सुरक्षित डिलीवरी</h4>
+            <p>पवित्रता बनाए रखने के लिए सावधानी से पैक किया गया।</p>
           </div>
         </div>
       </div>
@@ -131,22 +131,22 @@ export async function renderHome() {
     <section class="section" style="border-top:1px solid var(--color-border-light);">
       <div class="container">
         <div style="text-align:center; margin-bottom:var(--space-12);">
-          <span class="section-label">Community</span>
-          <h2 class="section-title">Devotee Stories</h2>
+          <span class="section-label">समुदाय</span>
+          <h2 class="section-title">भक्तों के अनुभव</h2>
         </div>
         
         <div class="testimonials-grid">
           <div class="testimonial-card">
-            <p>"The Hanuman statue is magnificent. You can feel the positive energy the moment you unbox it."</p>
-            <div style="margin-top:var(--space-4); font-weight:700;">— Rajesh Khanna</div>
+            <p>"हनुमान जी की मूर्ति अत्यंत सुंदर है। अनबॉक्स करते ही सकारात्मक ऊर्जा महसूस होती है।"</p>
+            <div style="margin-top:var(--space-4); font-weight:700;">— राजेश खन्ना</div>
           </div>
           <div class="testimonial-card">
-            <p>"Authentic products and very fast delivery. The WhatsApp support is very helpful and personal."</p>
-            <div style="margin-top:var(--space-4); font-weight:700;">— Priya Sharma</div>
+            <p>"प्रामाणिक उत्पाद और बहुत तेज़ डिलीवरी। व्हाट्सएप सपोर्ट बहुत मददगार है।"</p>
+            <div style="margin-top:var(--space-4); font-weight:700;">— प्रिया शर्मा</div>
           </div>
           <div class="testimonial-card">
-            <p>"I ordered the Rudraksha Mala, and the quality is exceptional. Truly blessed to have found this store."</p>
-            <div style="margin-top:var(--space-4); font-weight:700;">— Amit Singh</div>
+            <p>"मैंने रुद्राक्ष माला मंगवाई थी, गुणवत्ता बहुत अच्छी है। इस दुकान को पाकर धन्य महसूस कर रहा हूँ।"</p>
+            <div style="margin-top:var(--space-4); font-weight:700;">— अमित सिंह</div>
           </div>
         </div>
       </div>
@@ -156,11 +156,11 @@ export async function renderHome() {
     <section class="section">
       <div class="container">
         <div class="newsletter-box shadow-xl">
-          <h2>Join Our Spiritual Community</h2>
-          <p>Subscribe to receive weekly spiritual insights and exclusive early access to new collections.</p>
-          <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Blessings! You are now subscribed.');">
-            <input type="email" placeholder="Your email address" required />
-            <button type="submit" class="btn btn--primary">Join Now</button>
+          <h2>हमारे आध्यात्मिक समुदाय से जुड़ें</h2>
+          <p>साप्ताहिक आध्यात्मिक ज्ञान और नए संग्रहों तक विशेष पहुंच के लिए सब्सक्राइब करें।</p>
+          <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Blessings! आप सब्सक्राइब हो गए हैं।');">
+            <input type="email" placeholder="आपका ईमेल पता" required />
+            <button type="submit" class="btn btn--primary">अभी जुड़ें</button>
           </form>
         </div>
       </div>

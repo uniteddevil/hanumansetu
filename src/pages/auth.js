@@ -7,30 +7,30 @@ export function renderLogin() {
       <div class="container container--narrow">
         <div class="auth-card glass-card fade-in">
           <div class="auth-card__header">
-            <h2>Welcome Back</h2>
-            <p>Login to your spiritual account</p>
+            <h2>स्वागत है</h2>
+            <p>अपने आध्यात्मिक खाते में लॉगिन करें</p>
           </div>
           
           <form class="auth-form" id="login-form">
             <div id="auth-error" class="auth-error" style="display:none; padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 0.875rem;"></div>
             
             <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" id="login-email" placeholder="devotee@example.com" required />
+              <label for="email">ईमेल पता</label>
+              <input type="email" id="login-email" placeholder="example@email.com" required />
             </div>
             
             <div class="form-group">
-              <label for="password">Password</label>
+              <label for="password">पासवर्ड</label>
               <input type="password" id="login-password" placeholder="••••••••" required />
             </div>
             
             <button type="submit" class="btn btn--primary btn--lg" style="width:100%;" id="login-btn">
-              Login 🙏
+              लॉगिन करें 🙏
             </button>
           </form>
           
           <div class="auth-card__footer">
-            <p>Don't have an account? <a href="#/register" style="color: var(--color-primary); font-weight: 600;">Register Now</a></p>
+            <p>खाता नहीं है? <a href="#/register" style="color: var(--color-primary); font-weight: 600;">रजिस्टर करें</a></p>
           </div>
         </div>
       </div>
@@ -44,35 +44,35 @@ export function renderRegister() {
       <div class="container container--narrow">
         <div class="auth-card glass-card fade-in">
           <div class="auth-card__header">
-            <h2>Create Account</h2>
-            <p>Join the HanumanSetu family of devotees</p>
+            <h2>खाता बनाएं</h2>
+            <p>हनुमान सेतु परिवार में आपका स्वागत है</p>
           </div>
           
           <form class="auth-form" id="register-form">
             <div id="auth-error" class="auth-error" style="display:none; padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 0.875rem;"></div>
             
             <div class="form-group">
-              <label for="full-name">Full Name</label>
-              <input type="text" id="full-name" placeholder="Enter your name" required />
+              <label for="full-name">पूरा नाम</label>
+              <input type="text" id="full-name" placeholder="आपका नाम दर्ज करें" required />
             </div>
 
             <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" id="register-email" placeholder="devotee@example.com" required />
+              <label for="email">ईमेल पता</label>
+              <input type="email" id="register-email" placeholder="example@email.com" required />
             </div>
             
             <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" id="register-password" placeholder="Minimum 6 characters" minlength="6" required />
+              <label for="password">पासवर्ड</label>
+              <input type="password" id="register-password" placeholder="कम से कम 6 अक्षर" minlength="6" required />
             </div>
             
             <button type="submit" class="btn btn--primary btn--lg" style="width:100%;" id="register-btn">
-              Create Account ✨
+              खाता बनाएं ✨
             </button>
           </form>
           
           <div class="auth-card__footer">
-            <p>Already have an account? <a href="#/login" style="color: var(--color-primary); font-weight: 600;">Login Here</a></p>
+            <p>पहले से खाता है? <a href="#/login" style="color: var(--color-primary); font-weight: 600;">लॉगिन करें</a></p>
           </div>
         </div>
       </div>
@@ -93,7 +93,7 @@ export function initAuthEvents(type) {
 
     // UI Loading state
     btn.disabled = true;
-    btn.textContent = 'Please wait...';
+    btn.textContent = 'प्रतीक्षा करें...';
     errorEl.style.display = 'none';
 
     const email = form.querySelector('input[type="email"]').value;
@@ -117,7 +117,7 @@ export function initAuthEvents(type) {
         if (data.user && data.session) {
           navigate('/');
         } else {
-          errorEl.textContent = 'Success! Please check your email for verification.';
+          errorEl.textContent = 'सफलता! कृपया अपना ईमेल सत्यापित करें।';
           errorEl.style.display = 'block';
           errorEl.style.backgroundColor = '#dcfce7';
           errorEl.style.color = '#166534';
@@ -132,7 +132,7 @@ export function initAuthEvents(type) {
         navigate('/');
       }
     } catch (err) {
-      errorEl.textContent = err.message || 'Something went wrong. Please try again.';
+      errorEl.textContent = err.message || 'कुछ गलत हुआ। कृपया पुनः प्रयास करें।';
       errorEl.style.display = 'block';
       errorEl.style.backgroundColor = '#fee2e2';
       errorEl.style.color = '#991b1b';

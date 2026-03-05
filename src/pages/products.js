@@ -9,22 +9,29 @@ export async function renderProducts(params = {}) {
     allProducts = allProducts.filter(p => p.category === category);
   }
 
+  // Map category English names to Hindi for display if needed
+  const categoryDisplay = {
+    'Statues': 'पवित्र मूर्तियाँ',
+    'Rosaries': 'सिद्ध माला',
+    'Pooja Essentials': 'पूजा सामग्री'
+  }[category] || category;
+
   return `
     <section class="section" style="padding-top:calc(var(--header-height) + var(--space-12));">
       <div class="container">
         <div style="text-align:center;margin-bottom:var(--space-12);">
-          <span class="section-label">${category ? 'Sanctuary Collection' : 'Divine Collection'}</span>
-          <h1 class="section-title">${category ? category : 'All Products'}</h1>
+          <span class="section-label">${category ? 'पवित्र संग्रह' : 'दिव्य संग्रह'}</span>
+          <h1 class="section-title">${category ? categoryDisplay : 'सभी उत्पाद'}</h1>
           <p class="section-subtitle" style="margin:0 auto;">
             ${category
-      ? `Discover our hand-picked ${category.toLowerCase()} for your spiritual practice.`
-      : 'Excellent devotional products for your religious and spiritual journey.'}
+      ? `आपकी आध्यात्मिक साधना के लिए हमारे चुनिंदा ${categoryDisplay.toLowerCase()}।`
+      : 'आपकी धार्मिक और आध्यात्मिक यात्रा के लिए उत्तम भक्ति उत्पाद।'}
           </p>
         </div>
         <div class="products-grid stagger-children">
           ${allProducts.length > 0
       ? allProducts.map((p) => renderProductCard(p)).join('')
-      : `<div style="grid-column: 1/-1; text-align:center; padding: 100px 0;"><h3>No products found in this category.</h3></div>`
+      : `<div style="grid-column: 1/-1; text-align:center; padding: 100px 0;"><h3>इस श्रेणी में कोई उत्पाद नहीं मिला।</h3></div>`
     }
         </div>
       </div>
