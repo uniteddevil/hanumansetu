@@ -647,13 +647,22 @@ h4 {
   border-color: var(--color-primary);
 }
 
-.product-card__image {
+.product-card__image-container {
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;
   overflow: hidden;
   background: var(--color-bg-warm);
   flex-shrink: 0;
+}
+
+.product-card__image,
+.product-card__carousel-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 1;
 }
 
@@ -662,6 +671,31 @@ h4 {
   height: 100%;
   object-fit: cover;
   transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.carousel--card {
+  height: 100%;
+}
+
+.carousel--card .carousel__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: var(--space-4);
+}
+
+.carousel--card .carousel__dots {
+  bottom: var(--space-3);
+  gap: var(--space-1.5);
+}
+
+.carousel--card .carousel__dot {
+  width: 6px;
+  height: 6px;
+}
+
+.carousel--card .carousel__dot.active {
+  transform: scale(1.3);
 }
 
 .product-card__tag {

@@ -1,6 +1,7 @@
 // Product card component
 import { formatPrice } from '../data/products.js';
 import { addToCart } from '../utils/cart.js';
+import { renderCarousel, initCarousel } from './carousel.js';
 
 export function renderProductCard(product) {
   const renderStars = (rating) => {
@@ -14,13 +15,27 @@ export function renderProductCard(product) {
     return `<div class="product-card__rating">${starsHtml} <span>${rating}</span></div>`;
   };
 
+  const hasMultipleImages = product.images && product.images.length > 1;
+  const carouselId = `card-carousel-${product.id}`;
+
+  const carouselItems = hasMultipleImages
+    ? product.images.map(img => `<img src="${img}" alt="${product.name}" loading="lazy" />`)
+    : [];
+
   return `
     <article class="product-card" data-product-id="${product.id}">
-      <a href="#/products/${product.slug}" class="product-card__image">
-        <img src="${product.image}" alt="${product.name}" loading="lazy"
-             onerror="this.style.display='none';this.parentElement.innerHTML+='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;font-size:3rem;opacity:0.2;\\'>🕉️</div>'" />
+      <div class="product-card__image-container">
+        ${hasMultipleImages
+      ? `<div class="product-card__carousel-wrapper">
+               ${renderCarousel({ id: carouselId, items: carouselItems, autoPlayInterval: 4000 + (product.id * 200), className: 'carousel--square carousel--card' })}
+             </div>`
+      : `<a href="#/products/${product.slug}" class="product-card__image">
+               <img src="${product.image}" alt="${product.name}" loading="lazy"
+                    onerror="this.style.display='none';this.parentElement.innerHTML+='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;font-size:3rem;opacity:0.2;\\'>🕉️</div>'" />
+             </a>`
+    }
         ${product.tag ? `<span class="product-card__tag">${product.tag}</span>` : ''}
-      </a>
+      </div>
       <div class="product-card__body">
         <div class="product-card__category">${product.category}</div>
         <h3 class="product-card__name">
@@ -45,6 +60,14 @@ export function renderProductCard(product) {
 }
 
 export function initProductCardEvents() {
+  // Initialize carousels for cards
+  document.querySelectorAll('.product-card').forEach(card => {
+    const carousel = card.querySelector('.carousel');
+    if (carousel) {
+      initCarousel(carousel.id);
+    }
+  });
+
   document.querySelectorAll('.add-to-cart-btn').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
