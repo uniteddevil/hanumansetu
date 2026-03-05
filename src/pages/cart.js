@@ -1,9 +1,10 @@
 // Cart page
 import { getCartItems, getCartTotal, removeFromCart, updateQuantity, getWhatsAppLink, clearCart } from '../utils/cart.js';
 import { formatPrice } from '../data/products.js';
+import { createOrder } from '../utils/orders.js';
 
-export function renderCart() {
-  const items = getCartItems();
+export async function renderCart() {
+  const items = await getCartItems();
 
   if (items.length === 0) {
     return `
@@ -20,7 +21,7 @@ export function renderCart() {
     `;
   }
 
-  const total = getCartTotal();
+  const total = await getCartTotal();
   const shipping = total >= 999 ? 0 : 99;
   const grandTotal = total + shipping;
 
@@ -78,13 +79,13 @@ export function renderCart() {
               <span>${formatPrice(grandTotal)}</span>
             </div>
 
-            <a href="${getWhatsAppLink()}" target="_blank" rel="noopener" class="btn btn--whatsapp cart-summary__checkout" id="checkout-btn">
+            <button class="btn btn--whatsapp cart-summary__checkout" id="checkout-btn">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
                 <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.555 4.124 1.526 5.858L0 24l6.335-1.498A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.82c-1.993 0-3.877-.535-5.509-1.508l-.395-.234-4.098.97.987-3.605-.243-.397A9.78 9.78 0 012.18 12c0-5.422 4.398-9.82 9.82-9.82 5.422 0 9.82 4.398 9.82 9.82 0 5.422-4.398 9.82-9.82 9.82z"/>
               </svg>
               व्हाट्सएप द्वारा ऑर्डर करें
-            </a>
+            </button>
 
             <p class="cart-summary__note">
               ऑर्डर की पुष्टि के लिए आपको व्हाट्सएप पर रीडायरेक्ट किया जाएगा। 
@@ -100,10 +101,10 @@ export function renderCart() {
 export function initCartEvents() {
   // Quantity buttons
   document.querySelectorAll('.cart-qty-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       const productId = parseInt(btn.dataset.id);
       const action = btn.dataset.action;
-      const items = getCartItems();
+      const items = await getCartItems();
       const item = items.find((i) => i.id === productId);
 
       if (item) {
@@ -124,23 +125,46 @@ export function initCartEvents() {
       rerenderCart();
     });
   });
+
+  // Checkout button
+  document.getElementById('checkout-btn')?.addEventListener('click', async (e) => {
+    const btn = e.currentTarget;
+    const originalContent = btn.innerHTML;
+
+    try {
+      btn.disabled = true;
+      btn.innerHTML = '<div class="loading-spinner" style="width:20px;height:20px;border-width:2px;margin:0 auto;"></div>';
+
+      const items = await getCartItems();
+      const total = await getCartTotal();
+      const shipping = total >= 999 ? 0 : 99;
+      const grandTotal = total + shipping;
+
+      const whatsappLink = getWhatsAppLink();
+
+      // Save order to Supabase
+      await createOrder({
+        items: items,
+        total_amount: grandTotal,
+        whatsapp_link: whatsappLink
+      });
+
+      // Open WhatsApp
+      window.open(whatsappLink, '_blank');
+
+      // Navigate to success or account page
+      window.location.hash = '/account/orders';
+
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('ऑर्डर सहेजने में विफल। कृपया फिर से प्रयास करें।');
+      btn.disabled = false;
+      btn.innerHTML = originalContent;
+    }
+  });
 }
 
 function rerenderCart() {
-  const app = document.getElementById('app');
-  // Preserve header + footer, just update the cart section
-  const header = app.querySelector('.header');
-  const footer = app.querySelector('.footer');
-
-  // Re-import and render
-  const cartSection = app.querySelector('.cart-page');
-  if (cartSection) {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = renderCart();
-    const newCartSection = tempDiv.querySelector('.cart-page');
-    if (newCartSection) {
-      cartSection.replaceWith(newCartSection);
-      initCartEvents();
-    }
-  }
+  // Use the main routing mechanism to rerender
+  window.dispatchEvent(new HashChangeEvent('hashchange'));
 }

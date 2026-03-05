@@ -1,5 +1,5 @@
 // Cart utility — localStorage-based cart management
-import { STORE_CONFIG, formatPrice, products } from '../data/products.js';
+import { STORE_CONFIG, formatPrice, fetchProducts } from '../data/products.js';
 
 const CART_KEY = 'hanumansetu_cart';
 
@@ -49,11 +49,13 @@ export function updateQuantity(productId, quantity) {
     return cart;
 }
 
-export function getCartItems() {
+export async function getCartItems() {
     const cart = getCart();
+    const liveProducts = await fetchProducts();
+
     return cart
         .map((item) => {
-            const product = products.find((p) => p.id === item.productId);
+            const product = liveProducts.find((p) => p.id === item.productId);
             if (!product) return null;
             return {
                 ...product,
