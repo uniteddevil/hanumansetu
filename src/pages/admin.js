@@ -299,7 +299,7 @@ async function renderProductsView() {
 }
 
 async function renderCustomersView() {
-    const { data: profiles, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
+    const { data: profiles, error } = await supabase.from('profiles').select('*');
 
     if (error) return `<div class="view-error">Error loading customers: ${error.message}</div>`;
 
@@ -316,7 +316,7 @@ async function renderCustomersView() {
                         <tr>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Joined</th>
+                            <th>User ID</th>
                             <th>Status</th>
                             <th>Role</th>
                         </tr>
@@ -326,7 +326,7 @@ async function renderCustomersView() {
                             <tr>
                                 <td><strong>${p.full_name || 'N/A'}</strong></td>
                                 <td>${p.email || 'N/A'}</td>
-                                <td>${new Date(p.created_at).toLocaleDateString('en-US')}</td>
+                                <td class="font-mono" style="font-size: 0.75rem;">${p.id?.slice(0, 8) || 'N/A'}</td>
                                 <td><span class="badge badge--shipped">Active</span></td>
                                 <td>${p.is_admin ? '<span class="badge badge--blessed">Admin</span>' : '<span class="badge badge--pending">User</span>'}</td>
                             </tr>
