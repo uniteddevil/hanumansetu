@@ -31,18 +31,25 @@ self.addEventListener('activate', (event) => {
 
 // Fetch: Stale-While-Revalidate Strategy
 self.addEventListener('fetch', (event) => {
-  // Skip cross-origin requests
-  if (!event.request.url.startsWith(self.location.origin)) return;
+  // Only handle GET requests and skip cross-origin
+  if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
+    return;
+  }
+
+  // Skip browser extensions and other non-http/https schemes
+  if (!(event.request.url.indexOf('http') === 0)) return;
 
   event.respondWith(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.match(event.request).then((cachedResponse) => {
         const fetchPromise = fetch(event.request).then((networkResponse) => {
-          // Cache the new response
-          if (networkResponse.ok) {
+          // Cache the new response if it's a valid asset
+          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
             cache.put(event.request, networkResponse.clone());
           }
           return networkResponse;
+        }).catch(() => {
+          // Silent catch for network errors
         });
 
         // Return cached response if available, otherwise wait for network
