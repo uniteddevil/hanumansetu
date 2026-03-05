@@ -1571,3 +1571,75 @@ h4 {
 .carousel__dot:hover {
   background: rgba(255, 255, 255, 0.8);
 }
+
+/* --- Features & CTA --- */
+.container--narrow {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-8);
+  text-align: center;
+}
+
+.feature-card {
+  padding: var(--space-8);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-light);
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-primary-light);
+}
+
+.feature-card__icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-4);
+}
+
+.feature-card__title {
+  margin-bottom: var(--space-2);
+}
+
+.feature-card__text {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.section--cta {
+  background: var(--color-text);
+  color: white;
+  text-align: center;
+}
+
+.cta__title {
+  color: white;
+  margin-bottom: var(--space-4);
+}
+
+.cta__text {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: var(--space-8);
+  font-size: var(--text-lg);
+}
+
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .feature-card {
+    padding: var(--space-6);
+  }
+
+  .cta__text {
+    font-size: var(--text-base);
+  }
+}
