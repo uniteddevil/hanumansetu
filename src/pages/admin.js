@@ -28,24 +28,24 @@ export function renderAdminLogin() {
         <div class="admin-login-card glass-card fade-in">
             <div class="brand">
                 <img src="/assets/logo.png" alt="Logo" />
-                <h1>हनुमान सेतु <span>Admin</span></h1>
+                <h1>Hanuman Setu <span>Admin</span></h1>
             </div>
-            <p class="subtitle">कृपया अपने एडमिन क्रेडेंशियल के साथ लॉग इन करें</p>
+            <p class="subtitle">Please login with your admin credentials</p>
             
             <form id="admin-login-form">
                 <div class="form-group">
-                    <label>ईमेल</label>
+                    <label>Email</label>
                     <input type="email" id="admin-email" placeholder="admin@hanumansetu.com" required />
                 </div>
                 <div class="form-group">
-                    <label>पासवर्ड</label>
+                    <label>Password</label>
                     <input type="password" id="admin-password" placeholder="••••••••" required />
                 </div>
-                <button type="submit" class="btn btn--primary btn--full">लॉग इन करें</button>
+                <button type="submit" class="btn btn--primary btn--full">Login</button>
             </form>
             
             <div class="footer">
-                <a href="#/">← मुख्य वेबसाइट पर वापस जाएं</a>
+                <a href="https://hanumansetu.com">← Back to main website</a>
             </div>
         </div>
     </div>
@@ -69,30 +69,30 @@ export async function renderAdmin() {
         <aside class="admin-sidebar">
             <div class="admin-sidebar__brand">
                 <img src="/assets/logo.png" alt="Logo" />
-                <span>हनुमान सेतु</span>
+                <span>Hanuman Setu</span>
             </div>
             
             <nav class="admin-sidebar__nav">
                 <button class="admin-nav-item active" data-view="dashboard">
-                    <span class="icon">📊</span> डैशबोर्ड
+                    <span class="icon">📊</span> Dashboard
                 </button>
                 <button class="admin-nav-item" data-view="orders">
-                    <span class="icon">📦</span> ऑर्डर
+                    <span class="icon">📦</span> Orders
                 </button>
                 <button class="admin-nav-item" data-view="products">
-                    <span class="icon">🛍️</span> उत्पाद
+                    <span class="icon">🛍️</span> Products
                 </button>
                 <button class="admin-nav-item" data-view="customers">
-                    <span class="icon">👥</span> ग्राहक
+                    <span class="icon">👥</span> Customers
                 </button>
             </nav>
 
             <div class="admin-sidebar__footer">
-                <button class="admin-nav-item" onclick="window.location.hash='#/'">
-                    <span class="icon">🏠</span> मुख्य साइट
+                <button class="admin-nav-item" onclick="window.location.href='https://hanumansetu.com'">
+                    <span class="icon">🏠</span> Main Site
                 </button>
                 <button class="admin-nav-item" id="admin-logout">
-                    <span class="icon">🚪</span> लॉगआउट
+                    <span class="icon">🚪</span> Logout
                 </button>
             </div>
         </aside>
@@ -100,13 +100,13 @@ export async function renderAdmin() {
         <main class="admin-main">
             <header class="admin-topbar">
                 <div class="admin-topbar__search">
-                    <input type="text" placeholder="खोजें..." />
+                    <input type="text" placeholder="Search..." />
                 </div>
                 <div class="admin-topbar__user">
-                    ${isDemoMode ? '<span class="badge badge--pending" style="margin-right:12px;">डेमो मोड सक्रिय</span>' : ''}
+                    ${isDemoMode ? '<span class="badge badge--pending" style="margin-right:12px;">Demo Mode Active</span>' : ''}
                     <div class="user-info">
-                        <strong>एडमिन</strong>
-                        <span>अधिपति</span>
+                        <strong>Admin</strong>
+                        <span>Super Admin</span>
                     </div>
                 </div>
             </header>
@@ -128,31 +128,31 @@ function renderDashboardView(orders) {
 
     return `
         <div class="view-header">
-            <h2>डैशबोर्ड अवलोकन</h2>
-            <p>${new Date().toLocaleDateString('hi-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+            <h2>Dashboard Overview</h2>
+            <p>${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
         </div>
 
         <div class="admin-stats-grid">
             <div class="admin-stat-card glass-card">
                 <div class="admin-stat-card__icon revenue">💰</div>
                 <div class="admin-stat-card__info">
-                    <span class="label">कुल राजस्व</span>
+                    <span class="label">Total Revenue</span>
                     <strong class="value">${formatPrice(totalRevenue)}</strong>
-                    <span class="trend positive">↑ 12.4%</span>
+                    <span class="trend positive">↑ 12.4% from yesterday</span>
                 </div>
             </div>
             <div class="admin-stat-card glass-card">
                 <div class="admin-stat-card__icon orders">📦</div>
                 <div class="admin-stat-card__info">
-                    <span class="label">कुल ऑर्डर</span>
+                    <span class="label">Total Orders</span>
                     <strong class="value">${orders.length}</strong>
-                    <span class="trend positive">↑ 8.7%</span>
+                    <span class="trend positive">↑ 8.7% from yesterday</span>
                 </div>
             </div>
             <div class="admin-stat-card glass-card">
                 <div class="admin-stat-card__icon users">👥</div>
                 <div class="admin-stat-card__info">
-                    <span class="label">नए ग्राहक</span>
+                    <span class="label">New Customers</span>
                     <strong class="value">235</strong>
                     <span class="trend positive">↑ 5.2%</span>
                 </div>
@@ -160,16 +160,16 @@ function renderDashboardView(orders) {
             <div class="admin-stat-card glass-card">
                 <div class="admin-stat-card__icon pending">⏳</div>
                 <div class="admin-stat-card__info">
-                    <span class="label">लंबित ऑर्डर</span>
+                    <span class="label">Pending Orders</span>
                     <strong class="value">${pendingOrders}</strong>
-                    <span class="trend neutral">कार्रवाई आवश्यक</span>
+                    <span class="trend neutral">Action Required</span>
                 </div>
             </div>
         </div>
 
         <div class="dashboard-charts">
             <div class="chart-container glass-card">
-                <h3>राजस्व रुझान (पिछले 7 दिन)</h3>
+                <h3>Revenue Trends (Last 7 Days)</h3>
                 <div class="mock-chart">
                     <svg viewBox="0 0 400 150" class="sparkline">
                         <path d="M0,120 L50,110 L100,130 L150,80 L200,90 L250,50 L300,70 L350,30 L400,40" fill="none" stroke="var(--color-primary)" stroke-width="3" />
@@ -183,18 +183,18 @@ function renderDashboardView(orders) {
 
         <div class="recent-orders glass-card">
             <div class="section-header">
-                <h3>हाल के ऑर्डर</h3>
-                <button class="btn btn--secondary btn--sm" onclick="document.querySelector('[data-view=\\'orders\\']').click()">सभी देखें</button>
+                <h3>Recent Orders</h3>
+                <button class="btn btn--secondary btn--sm" onclick="document.querySelector('[data-view=\\'orders\\']').click()">View All</button>
             </div>
             <div class="admin-table-wrapper">
                 <table class="admin-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>ग्राहक</th>
-                            <th>तिथि</th>
-                            <th>राशि</th>
-                            <th>स्थिति</th>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -202,7 +202,7 @@ function renderDashboardView(orders) {
                             <tr>
                                 <td class="font-mono">#${order.id.slice(0, 8)}</td>
                                 <td>${order.customer_name || 'Guest User'}</td>
-                                <td>${new Date(order.created_at).toLocaleDateString()}</td>
+                                <td>${new Date(order.created_at).toLocaleDateString('en-US')}</td>
                                 <td>${formatPrice(order.total_amount)}</td>
                                 <td><span class="badge badge--${order.status.toLowerCase()}">${order.status}</span></td>
                             </tr>
@@ -217,10 +217,10 @@ function renderDashboardView(orders) {
 function renderOrdersView(orders) {
     return `
         <div class="view-header">
-            <h2>ऑर्डर प्रबंधन</h2>
+            <h2>Order Management</h2>
             <div class="view-actions">
-                <button class="btn btn--secondary btn--sm">फ़िल्टर</button>
-                <button class="btn btn--primary btn--sm">निर्यात करें (CSV)</button>
+                <button class="btn btn--secondary btn--sm">Filter</button>
+                <button class="btn btn--primary btn--sm">Export (CSV)</button>
             </div>
         </div>
 
@@ -230,29 +230,29 @@ function renderOrdersView(orders) {
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>तिथि</th>
-                            <th>ग्राहक</th>
-                            <th>आइटम</th>
-                            <th>कुल राशि</th>
-                            <th>स्थिति</th>
-                            <th>कार्य</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Items</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${orders.map(order => `
                             <tr>
                                 <td class="font-mono">#${order.id.slice(0, 8)}</td>
-                                <td>${new Date(order.created_at).toLocaleDateString()}</td>
+                                <td>${new Date(order.created_at).toLocaleDateString('en-US')}</td>
                                 <td>${order.customer_name || 'Anonymous'}</td>
                                 <td class="text-truncate" style="max-width:150px;" title="${order.items_summary || 'Multiple items'}">${order.items_summary || 'Multiple items'}</td>
                                 <td>${formatPrice(order.total_amount)}</td>
                                 <td>
                                     <select class="admin-status-select" data-order-id="${order.id}">
                                         <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>Pending</option>
-                                        <option value="Blessed" ${order.status === 'Blessed' ? 'selected' : ''}>अभिमंत्रित</option>
-                                        <option value="Shipped" ${order.status === 'Shipped' ? 'selected' : ''}>भेज दिया गया</option>
-                                        <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>वितरित</option>
-                                        <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>रद्द</option>
+                                        <option value="Blessed" ${order.status === 'Blessed' ? 'selected' : ''}>Blessed</option>
+                                        <option value="Shipped" ${order.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
+                                        <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                                        <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
                                     </select>
                                 </td>
                                 <td>
@@ -271,8 +271,8 @@ async function renderProductsView() {
     const products = await fetchProducts();
     return `
         <div class="view-header">
-            <h2>उत्पाद प्रबंधन</h2>
-            <button class="btn btn--primary" id="add-product-btn">+ नया उत्पाद जोड़ें</button>
+            <h2>Product Management</h2>
+            <button class="btn btn--primary" id="add-product-btn">+ Add New Product</button>
         </div>
 
         <div class="admin-products-grid">
@@ -289,8 +289,8 @@ async function renderProductsView() {
                         </div>
                     </div>
                     <div class="admin-product-card__actions">
-                        <button class="btn btn--sm btn--secondary edit-product-btn" data-id="${p.id}">संपादित</button>
-                        <button class="btn btn--sm btn--danger delete-product-btn" data-id="${p.id}">हटाएं</button>
+                        <button class="btn btn--sm btn--secondary edit-product-btn" data-id="${p.id}">Edit</button>
+                        <button class="btn btn--sm btn--danger delete-product-btn" data-id="${p.id}">Delete</button>
                     </div>
                 </div>
             `).join('')}
@@ -324,7 +324,7 @@ export function initAdminEvents() {
                 container.innerHTML = await renderProductsView();
                 attachProductEvents();
             } else {
-                container.innerHTML = `<div class="view-empty"><h3>${view} जल्द आ रहा है...</h3></div>`;
+                container.innerHTML = `<div class="view-empty"><h3>${view} Coming Soon...</h3></div>`;
             }
         });
     });
@@ -347,7 +347,7 @@ export function initAdminEvents() {
 
             const { error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) {
-                alert('लॉगिन विफल: ' + error.message);
+                alert('Login failed: ' + error.message);
             } else {
                 window.location.reload(); // Refresh to trigger isAdmin check
             }
@@ -360,7 +360,7 @@ function attachOrderEvents() {
         select.addEventListener('change', async (e) => {
             const orderId = e.target.dataset.orderId;
             if (orderId.startsWith('MOCK')) {
-                alert('डेमो डेटा सुरक्षित है। इसे अपडेट नहीं किया जा सकता।');
+                alert('Demo data is protected. It cannot be updated.');
                 return;
             }
             const newStatus = e.target.value;
@@ -373,6 +373,6 @@ function attachOrderEvents() {
 
 function attachProductEvents() {
     document.getElementById('add-product-btn')?.addEventListener('click', () => {
-        alert('उत्पाद जोड़ें सुविधा जल्द ही इस नए लेआउट में सक्रिय होगी!');
+        alert('Add Product feature will be active in this layout soon!');
     });
 }
