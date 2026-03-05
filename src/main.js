@@ -85,11 +85,6 @@ registerRoute('/account/:section', async () => {
     initAccountEvents();
 });
 
-registerRoute('/admin', async () => {
-    await renderPage(renderAdmin(), true); // True = Full screen
-    initAdminEvents();
-});
-
 // SUBDOMAIN JAIL
 // If on admin.hanumansetu.com, force EVERYTHING to the admin view
 if (window.location.hostname === 'admin.hanumansetu.com') {
@@ -106,7 +101,17 @@ if (window.location.hostname === 'admin.hanumansetu.com') {
         runAdminJail();
     });
 } else {
-    // Start the app normally
+    // If someone tries to reach #/admin on the root domain, clear it
+    if (window.location.hash === '#/admin') {
+        window.location.hash = '#/';
+    }
+    window.addEventListener('hashchange', () => {
+        if (window.location.hash === '#/admin') {
+            window.location.hash = '#/';
+        }
+    });
+
+    // Start the app normally (excludes /admin route)
     initRouter();
 }
 
