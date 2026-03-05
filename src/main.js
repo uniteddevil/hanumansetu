@@ -13,10 +13,14 @@ import { renderAdmin, initAdminEvents } from './pages/admin.js';
 
 const app = document.getElementById('app');
 
-async function renderPage(pageContentPromise) {
-    // Show header/footer immediately, with loading in middle
-    app.innerHTML = renderHeader() + `<main id="page-content"><div class="loading-container"><div class="loading-spinner"></div></div></main>` + renderFooter();
-    initHeaderEvents();
+async function renderPage(pageContentPromise, isFullScreen = false) {
+    // Show header/footer only if not full screen
+    if (isFullScreen) {
+        app.innerHTML = `<main id="page-content" class="full-screen-main"><div class="loading-container"><div class="loading-spinner"></div></div></main>`;
+    } else {
+        app.innerHTML = renderHeader() + `<main id="page-content"><div class="loading-container"><div class="loading-spinner"></div></div></main>` + renderFooter();
+        initHeaderEvents();
+    }
 
     try {
         const pageContent = await pageContentPromise;
@@ -82,9 +86,15 @@ registerRoute('/account/:section', async () => {
 });
 
 registerRoute('/admin', async () => {
-    await renderPage(renderAdmin());
+    await renderPage(renderAdmin(), true); // True = Full screen
     initAdminEvents();
 });
+
+// SUBDOMAIN REDIRECT
+// If on admin.hanumansetu.com, force to /admin if not already there
+if (window.location.hostname === 'admin.hanumansetu.com' && window.location.hash !== '#/admin') {
+    window.location.hash = '#/admin';
+}
 
 // Start the app
 initRouter();
