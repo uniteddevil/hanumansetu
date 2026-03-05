@@ -96,9 +96,12 @@ export async function initHeaderEvents() {
     }
   });
 
-  // Auth state change
-  supabase.auth.onAuthStateChange(() => {
-    // Rerender header when auth changes
+}
+
+// Global Auth state change listener (only register once)
+supabase.auth.onAuthStateChange((event) => {
+  // Only re-render on actual sign in/out events to prevent loops
+  if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
     const siteHeader = document.getElementById('site-header');
     if (siteHeader) {
       const parent = siteHeader.parentElement;
@@ -108,7 +111,7 @@ export async function initHeaderEvents() {
       const temp = document.createElement('div');
       temp.innerHTML = newHeaderHtml;
       parent.insertBefore(temp.firstElementChild, nextSibling);
-      initHeaderEvents(); // This will trigger the isAdmin check again
+      initHeaderEvents();
     }
-  });
-}
+  }
+});
