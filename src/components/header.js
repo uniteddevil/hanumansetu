@@ -1,9 +1,12 @@
-// Header component
 import { getCartCount } from '../utils/cart.js';
 import { getCurrentPath } from '../router.js';
+import { supabase } from '../utils/supabase.js';
 
 export function renderHeader() {
   const path = getCurrentPath();
+  const session = supabase.auth.session ? supabase.auth.session() : null; // This might need async or event handling
+  // For now, we'll check local storage or use a reactive approach
+  const user = JSON.parse(localStorage.getItem('sb-qwmqxdxkgzdgdyyynlku-auth-token'))?.user;
 
   return `
     <header class="header" id="site-header">
@@ -17,6 +20,7 @@ export function renderHeader() {
           <a href="#/" class="header__nav-link ${path === '/' ? 'active' : ''}">होम</a>
           <a href="#/products" class="header__nav-link ${path === '/products' ? 'active' : ''}">उत्पाद</a>
           <a href="#/about" class="header__nav-link ${path === '/about' ? 'active' : ''}">हमारे बारे में</a>
+          ${user ? `<a href="#/account" class="header__nav-link ${path === '/account' ? 'active' : ''}">मेरा खाता</a>` : `<a href="#/login" class="header__nav-link ${path === '/login' ? 'active' : ''}">लॉगिन</a>`}
         </nav>
 
         <div class="header__right" style="display:flex;align-items:center;gap:8px;">
@@ -79,6 +83,22 @@ export function initHeaderEvents() {
       }
     } else if (badge) {
       badge.remove();
+    }
+  });
+
+  // Auth state change
+  supabase.auth.onAuthStateChange(() => {
+    // Rerender header when auth changes
+    const siteHeader = document.getElementById('site-header');
+    if (siteHeader) {
+      const parent = siteHeader.parentElement;
+      const nextSibling = siteHeader.nextSibling;
+      siteHeader.remove();
+      const newHeaderHtml = renderHeader();
+      const temp = document.createElement('div');
+      temp.innerHTML = newHeaderHtml;
+      parent.insertBefore(temp.firstElementChild, nextSibling);
+      initHeaderEvents();
     }
   });
 }
