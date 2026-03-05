@@ -29,6 +29,12 @@ export const products = [
         ],
         tag: 'सबसे ज्यादा बिकने वाला',
         image: '/assets/product-1.png',
+        images: [
+            '/assets/product-1.png',
+            '/assets/product-1-alt-1.png',
+            '/assets/product-1-alt-2.png',
+            '/assets/product-1-alt-3.png'
+        ],
         rating: 4.9,
         reviewCount: 124,
         reviews: [
