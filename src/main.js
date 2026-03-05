@@ -90,14 +90,25 @@ registerRoute('/admin', async () => {
     initAdminEvents();
 });
 
-// SUBDOMAIN REDIRECT
-// If on admin.hanumansetu.com, force to /admin if not already there
-if (window.location.hostname === 'admin.hanumansetu.com' && window.location.hash !== '#/admin') {
-    window.location.hash = '#/admin';
+// SUBDOMAIN JAIL
+// If on admin.hanumansetu.com, force EVERYTHING to the admin view
+if (window.location.hostname === 'admin.hanumansetu.com') {
+    const runAdminJail = async () => {
+        await renderPage(renderAdmin(), true);
+        initAdminEvents();
+    };
+    runAdminJail();
+    // Stop regular route execution by overwriting window.location.hash logic
+    window.addEventListener('hashchange', (e) => {
+        if (window.location.hash !== '#/admin') {
+            window.location.hash = '#/admin';
+        }
+        runAdminJail();
+    });
+} else {
+    // Start the app normally
+    initRouter();
 }
-
-// Start the app
-initRouter();
 
 // Register Service Worker for PWA
 if ('serviceWorker' in navigator) {

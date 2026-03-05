@@ -22,12 +22,41 @@ const generateMockData = () => {
     return orders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 };
 
+export function renderAdminLogin() {
+    return `
+    <div class="admin-login-wrapper">
+        <div class="admin-login-card glass-card fade-in">
+            <div class="brand">
+                <img src="/assets/logo.png" alt="Logo" />
+                <h1>हनुमान सेतु <span>Admin</span></h1>
+            </div>
+            <p class="subtitle">कृपया अपने एडमिन क्रेडेंशियल के साथ लॉग इन करें</p>
+            
+            <form id="admin-login-form">
+                <div class="form-group">
+                    <label>ईमेल</label>
+                    <input type="email" id="admin-email" placeholder="admin@hanumansetu.com" required />
+                </div>
+                <div class="form-group">
+                    <label>पासवर्ड</label>
+                    <input type="password" id="admin-password" placeholder="••••••••" required />
+                </div>
+                <button type="submit" class="btn btn--primary btn--full">लॉग इन करें</button>
+            </form>
+            
+            <div class="footer">
+                <a href="#/">← मुख्य वेबसाइट पर वापस जाएं</a>
+            </div>
+        </div>
+    </div>
+    `;
+}
+
 export async function renderAdmin() {
     const isUserAdmin = await isAdmin();
 
     if (!isUserAdmin) {
-        setTimeout(() => navigate('/'), 0);
-        return '';
+        return renderAdminLogin();
     }
 
     // Try to get real orders, fallback to mock if empty
@@ -307,6 +336,23 @@ export function initAdminEvents() {
     });
 
     attachOrderEvents();
+
+    // Add specific listener for Admin Login form if it exists
+    const loginForm = document.getElementById('admin-login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) {
+                alert('लॉगिन विफल: ' + error.message);
+            } else {
+                window.location.reload(); // Refresh to trigger isAdmin check
+            }
+        });
+    }
 }
 
 function attachOrderEvents() {
