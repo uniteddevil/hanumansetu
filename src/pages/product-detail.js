@@ -46,8 +46,8 @@ export function renderProductDetail(slug) {
   };
 
   const carouselItems = product.images && product.images.length > 0
-    ? product.images.map(img => `<img src="${img}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;" />`)
-    : [`<img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;" />`];
+    ? product.images.map(img => `<img src="${img}" alt="${product.name}" />`)
+    : [`<img src="${product.image}" alt="${product.name}" />`];
 
   return `
     <section class="product-detail">
@@ -62,7 +62,7 @@ export function renderProductDetail(slug) {
 
         <div class="product-detail__inner">
           <div class="product-detail__gallery fade-in" style="overflow:visible;">
-            ${renderCarousel({ id: 'product-gallery-carousel', items: carouselItems, autoPlayInterval: 4000 })}
+            ${renderCarousel({ id: 'product-gallery-carousel', items: carouselItems, autoPlayInterval: 4000, className: 'carousel--square' })}
           </div>
 
           <div class="product-detail__info fade-in-up">

@@ -1477,6 +1477,16 @@ h4 {
   border-radius: var(--radius-lg);
 }
 
+.carousel--square {
+  aspect-ratio: 1 / 1;
+  background: var(--color-bg-warm);
+}
+
+.carousel--square .carousel__slide img {
+  object-fit: contain;
+  padding: var(--space-6);
+}
+
 .carousel__track-container {
   position: relative;
   height: 100%;
